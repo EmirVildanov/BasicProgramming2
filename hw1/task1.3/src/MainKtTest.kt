@@ -1,9 +1,35 @@
 import org.junit.Test
+import kotlin.test.assertEquals
 
 internal class MainKtTest {
 
     @Test
-    fun countSubstringOccurrence() {
+    fun shouldReturn0AsSubstringIsEmpty() {
+        assertEquals(0, countSubstringOccurrence("abba", ""))
+    }
 
+    @Test
+    fun shouldReturn0AsSubstringDoesNotContainsInString() {
+        assertEquals(0, countSubstringOccurrence("abuba", "am"))
+    }
+
+    @Test
+    fun shouldReturn1AsSubstringIsAFullString() {
+        assertEquals(1, countSubstringOccurrence("ma", "ma"))
+    }
+
+    @Test
+    fun shouldReturn3AsStringContains3Substrings() {
+        assertEquals(3, countSubstringOccurrence("ololol", "ol"))
+    }
+
+    @Test
+    fun shouldReturn3CountingNewLineSymbolSubstrrig() {
+        assertEquals(3, countSubstringOccurrence("ma\n\n\n", "\n"))
+    }
+
+    @Test
+    fun shouldReturn3CountingSpecialSymbols() {
+        assertEquals(3, countSubstringOccurrence("2015;!54;!code;!", ";!"))
     }
 }
