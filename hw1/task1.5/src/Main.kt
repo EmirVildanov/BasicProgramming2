@@ -11,7 +11,7 @@ fun countNonEmptyLines(file: File): Int {
 }
 
 fun main() {
-    val file =  File("test.txt")
+    val file = File("test.txt")
     if (!file.exists()) {
         print("\nFile not found\n")
         return
