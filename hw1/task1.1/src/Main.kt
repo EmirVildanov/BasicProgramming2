@@ -22,7 +22,7 @@ fun main() {
     print("Enter the second board : ")
     val secondBoard: Int = scan.nextInt()
     val length = firstBoard + secondBoard
-    val array = IntArray(length) {0}
+    val array = IntArray(length) { 0 }
     print("Enter $length elements of the list : ")
     for (i in 0 until length) {
         array[i] = scan.nextInt()

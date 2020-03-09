@@ -15,7 +15,7 @@ internal class MainKtTest {
     @Test
     fun shouldLeaveIntArrayInHisFirstView() {
         val array = intArrayOf(1, 2, 3, 4, 5)
-        reverse(array, array.size -1 , array.size - 1)
+        reverse(array, array.size - 1, array.size - 1)
         for (i in array.indices) {
             assertEquals(intArrayOf(1, 2, 3, 4, 5)[i], array[i])
         }
@@ -24,7 +24,7 @@ internal class MainKtTest {
     @Test
     fun shouldAlsoLeaveIntArrayInHisFirstView() {
         val array = intArrayOf(1, 2, 3, 4, 5)
-        reverse(array, 0 , 0)
+        reverse(array, 0, 0)
         for (i in array.indices) {
             assertEquals(intArrayOf(1, 2, 3, 4, 5)[i], array[i])
         }
