@@ -1,3 +1,6 @@
+import java.io.File
+import kotlin.math.abs
+
 /*
 Реализовать класс для работы с хеш-таблицей (на списках).
 Общение с пользователем должно происходит в интерактивном режиме:
@@ -10,189 +13,173 @@
 в класс используемая хеш-функция должна передаваться из клиентского кода.
  */
 
+const val firstBucketsNumber = 20
+const val hashPrimeNumber = 3
+
+fun firstHashFunction(string: String, size: Int): Int {
+    var numberPower = 1;
+    var hashNumber = 0;
+    for (element in string) {
+        hashNumber += (element - 'a' + 1) * numberPower
+        numberPower *= hashPrimeNumber
+    }
+    return abs(hashNumber % size); //abs because in case of big words it will return negative answer
+}
+
+//fun secondHashFunction(string: String, size: Int): Int {
+//    var numberPower = 1;
+//    var hashNumber = 0;
+//    for (element in string)
+//    {
+//        hashNumber += (element - 'a' + 1) * numberPower
+//        numberPower *= hashPrimeNumber
+//    }
+//    return abs(hashNumber % size); //abs because in case of big words it will return negative answer
+//}
+
 class Hashtable() {
-
-    const val firstBucketsNumber = 20
-    const val hashPrimeNumber = 3
-
     private var bucketsArray = ArrayList<Bucket>(firstBucketsNumber)
     private var loadFactor = 0
+    private var hashFunction: (String, Int) -> Int = ::firstHashFunction
     private var size = firstBucketsNumber
-    private val wordsNumber = 0
-    private val attemptsArray = ArrayList() //for statistics
-    private val expansionNumber: Int //how many times we reallocated our array
+    private var wordsNumber = 0
+    private val attemptsArray = mutableListOf<Int>() //for statistics
+    private val expansionNumber: Int = 0//how many times we reallocated our array
 
-    class Bucket() {
 
-        fun isEmpty(currentString): Boolean {
-            if (currentString == null) {
-                return true;
-            }
-            val check = "Empty"
-            if (compare(currentString, check)) {
-                return true;
-            }
-            return false;
+    class Bucket(var value: String) {
+        var valuePower = 0
+        fun isEmpty(): Boolean {
+            return value == "Empty"
         }
 
     }
 
     private fun redefineHashValues() {
-        val wordsArray = createStringArray(hashtable.wordsNumber);
+        val wordsArray = ArrayList<Bucket>(wordsNumber);
         var arrayIndex = 0;
         var hashValue = 0;
-        for (i in 0 until previousSize) {
-            String * currentString = hashtable.bucketsArray[i];
-            if (!isEmptyBucket(currentString)) {
-                hashtable.bucketsArray[i] = createString("Empty");
+        for (i in 0 until size) {
+            val currentString = bucketsArray[i];
+            if (!currentString.isEmpty()) {
+                bucketsArray[i] = Bucket("Empty")
                 wordsArray[arrayIndex] = currentString;
                 ++arrayIndex;
             }
         }
-        for (i in 0 until wordsNumber)
-        {
-            var currentWord = wordsArray[i];
-            hashValue = hashFunction(hashtable, currentWord);
-            val attemptsNumber = 1;
-            bool insertCheck = false;
+        for (i in 0 until wordsNumber) {
+            val currentWord = wordsArray[i]
+            hashValue = hashFunction(currentWord.value, size)
+            var attemptsNumber = 1
+            var insertCheck = false
             while (!insertCheck) {
-                while (hashValue + attemptsNumber < hashtable.size) {
-                    if (isEmptyBucket(hashtable.bucketsArray[hashValue + attemptsNumber])) {
-                        deleteString(hashtable.bucketsArray[hashValue + attemptsNumber]);
-                        hashtable.bucketsArray[hashValue + attemptsNumber] = currentWord;
+                while (hashValue + attemptsNumber < size) {
+                    if (bucketsArray[hashValue + attemptsNumber].isEmpty()) {
+                        bucketsArray[hashValue + attemptsNumber] = currentWord
                         insertCheck = true;
                         break;
                     }
-                    ++attemptsNumber;
-                    hashValue = hashValue + attemptsNumber * attemptsNumber;
+                    hashValue += attemptsNumber * attemptsNumber;
                 }
-                hashValue = hashValue % hashtable.size;
+                hashValue %= size;
                 attemptsNumber = 0;
             }
         }
-        free(wordsArray);
-        return hashtable;
     }
 
-//    String **extendBucketsArray(Hashtable *hashtable)
-//    {
-//        if (hashtable == null) {
-//            return null;
-//        }
-//        int newLength = firstBucketsNumber *(hashtable.expansionNumber+2);
-//        hashtable.bucketsArray = realloc(hashtable.bucketsArray, newLength * sizeof(String *));
-//        int rememberSize = hashtable.size;
-//        hashtable.size = newLength;
-//        initializeBucketsArray(hashtable, rememberSize, hashtable.size);
-//        ++hashtable.expansionNumber;
-//        hashtable.loadFactor = (float) hashtable.wordsNumber / (float) hashtable.size;
-//        return hashtable.bucketsArray;
-//    }
-
-    private fun startInsertProcess(String* currentWord)
-    {
-        if (hashtable == null) {
-            return null;
-        }
-        int hashIndex = hashFunction (hashtable, currentWord);
-        int attemptsNumber = 1;
-        int rememberAttemptsNumber = 1;
-        bool insertCheck = false;
+    private fun startInsertProcess(currentWord: String) {
+        var hashIndex = hashFunction(currentWord, size)
+        var attemptsNumber = 1
+        var rememberAttemptsNumber = 1
+        var insertCheck = false;
         while (!insertCheck) {
-            while (hashIndex + attemptsNumber < hashtable.size) {
-                if (compare(hashtable.bucketsArray[hashIndex + attemptsNumber], currentWord)) {
-                    changeStringPower(
-                        hashtable.bucketsArray[hashIndex + attemptsNumber],
-                        getStringPower(hashtable.bucketsArray[hashIndex + attemptsNumber]) + 1
-                    );
-                    hashtable.attemptsArray[hashtable.attemptsArraySize - 1] = rememberAttemptsNumber;
+            while (hashIndex + attemptsNumber < size) {
+                if (bucketsArray[hashIndex + attemptsNumber].value == currentWord) {
+                    bucketsArray[hashIndex + attemptsNumber].valuePower += 1
+                    attemptsArray[attemptsArray.size - 1] = rememberAttemptsNumber;
                     insertCheck = true;
-                    deleteString(currentWord);
                     break;
-                } else if (isEmptyBucket(hashtable.bucketsArray[hashIndex + attemptsNumber])) {
-                    deleteString(hashtable.bucketsArray[hashIndex + attemptsNumber]);
-                    hashtable.bucketsArray[hashIndex + attemptsNumber] = currentWord;
-                    hashtable.attemptsArray[hashtable.attemptsArraySize - 1] = rememberAttemptsNumber;
-                    ++hashtable.wordsNumber;
-                    insertCheck = true;
+                } else if (bucketsArray[hashIndex + attemptsNumber].isEmpty()) {
+                    bucketsArray[hashIndex + attemptsNumber].value = currentWord;
+                    attemptsArray[attemptsArray.size - 1] = rememberAttemptsNumber
+                    ++wordsNumber
+                    insertCheck = true
                     break;
                 }
-                ++attemptsNumber;
-                hashIndex = hashIndex + attemptsNumber * attemptsNumber;
+                ++attemptsNumber
+                hashIndex += attemptsNumber * attemptsNumber;
             }
-            hashIndex = hashIndex % hashtable.size;
+            hashIndex = hashIndex % size;
             rememberAttemptsNumber += attemptsNumber;
             attemptsNumber = 0;
         }
-        return hashtable;
     }
 
-    private fun insertNewWord(String *currentWord)
-    {
-        while (hashtable.loadFactor >= 0.7) {
-            int rememberSize = hashtable . size;
-            hashtable.bucketsArray = extendBucketsArray(hashtable);
-            hashtable = redefineHashValues(hashtable, rememberSize);
+    fun add(currentWord: String) {
+        while (loadFactor >= 0.7) {
+            redefineHashValues();
         }
-        hashtable.attemptsArray = realloc(hashtable.attemptsArray, (hashtable.attemptsArraySize + 1) * sizeof(int));
-        hashtable.attemptsArray[hashtable.attemptsArraySize] = 0;
-        ++hashtable.attemptsArraySize;
-        hashtable = startInsertProcess(hashtable, currentWord);
-        hashtable.loadFactor = (float) hashtable . wordsNumber /(float) hashtable . size;
+        attemptsArray.add(0)
+        startInsertProcess(currentWord);
+        loadFactor = wordsNumber / size
+    }
+
+    fun addFromFile(file: File) {
+
+    }
+
+    fun remove(word: String) {
+
+    }
+
+    fun findVale(word: String) {
+
+    }
+
+    fun changeHashFunction(functionNumber: Int) {
+
     }
 
 //functions to print statistics
 
     private fun findMaxAttemptsNumber(): Int {
-        int maxNumber = 0;
-        for (int i = 0; i < hashtable.attemptsArraySize; ++i)
-        {
-            if (hashtable.attemptsArray[i] > maxNumber) {
-                maxNumber = hashtable.attemptsArray[i];
+        var maxNumber = 0;
+        for (i in 0 until attemptsArray.size) {
+            if (attemptsArray[i] > maxNumber) {
+                maxNumber = attemptsArray[i];
             }
         }
         return maxNumber;
     }
 
     private fun findAverageAttemptsNumber(): Float {
-        if (hashtable == null) {
-            return -1;
+        val averageNumber: Float
+        var sum = 0
+        for (i in 0 until attemptsArray.size) {
+            sum += attemptsArray[i]
         }
-        float averageNumber = 0;
-        int sum = 0;
-        for (int i = 0; i < hashtable.attemptsArraySize; ++i)
-        {
-            sum += hashtable.attemptsArray[i];
-        }
-        averageNumber = (float) sum /(float) hashtable . attemptsArraySize;
-        return averageNumber;
+        averageNumber = (sum / attemptsArray.size).toFloat()
+        return averageNumber
     }
 
-    fun printHashtableWords(Hashtable *hashtable)
-    {
-        if (hashtable == null) {
-            return;
-        }
-        for (int i = 0; i < hashtable.size; ++i)
-        {
-            if (!isEmptyBucket(hashtable.bucketsArray[i])) {
-                char * charWord = toCharPtr(hashtable.bucketsArray[i]);
-                println("%s . %d", charWord, getStringPower(hashtable.bucketsArray[i]));
-                free(charWord);
+    private fun printWords() {
+        for (i in 0 until size) {
+            if (!bucketsArray[i].isEmpty()) {
+                val charWord = bucketsArray[i];
+                println("$charWord, ${bucketsArray[i].valuePower}")
             }
         }
     }
 
-    fun printStatistics(Hashtable *hashtable)
-    {
-        println("Load factor is : %f ", hashtable.loadFactor);
-        println("The number of extensions is : %d ", hashtable.expansionNumber);
-        println("The max number of searching attempts is : %d ", findMaxAttemptsNumber(hashtable));
-        println("The average number of searching attempts is : %f ", findAverageAttemptsNumber(hashtable));
-        printIntArray(hashtable.attemptsArray, hashtable.attemptsArraySize);
-        println("The number of added words is : %d ", hashtable.wordsNumber);
-        println("The number of empty buckets is : %d ", hashtable.size - hashtable.wordsNumber);
-        printHashtableWords(hashtable);
+    fun printStatistics() {
+        println("Load factor is : $loadFactor")
+        println("The number of extensions is : $expansionNumber")
+        println("The max number of searching attempts is : ${findMaxAttemptsNumber()}")
+        println("The average number of searching attempts is : ${findAverageAttemptsNumber()}")
+        attemptsArray.forEach { print(it) }
+        println("The number of added words is : $wordsNumber")
+        println("The number of empty buckets is : ${size - wordsNumber}")
+        printWords();
         println("");
     }
 }
