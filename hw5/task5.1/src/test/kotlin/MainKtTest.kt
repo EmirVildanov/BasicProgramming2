@@ -10,6 +10,11 @@ internal class MainKtTest {
     }
 
     @Test
+    fun shouldReturn7() {
+        assertEquals(7, sum(3, 4))
+    }
+
+    @Test
     fun shouldReturn5() {
         assertEquals(5, sum(3, 3))
     }
