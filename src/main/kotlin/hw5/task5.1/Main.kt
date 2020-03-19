@@ -3,5 +3,5 @@ fun sum(a: Int, b: Int): Int {
 }
 
 fun main() {
-
+    print("Blah")
 }
