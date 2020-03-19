@@ -16,6 +16,6 @@ internal class MainKtTest {
 
     @Test
     fun shouldReturn5() {
-        assertEquals(5, sum(3, 3))
+        assertEquals(5, sum(3, 2))
     }
 }
