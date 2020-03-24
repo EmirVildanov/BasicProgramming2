@@ -16,7 +16,7 @@ fun rearrangeArrayParts(array: IntArray, firstBoard: Int): IntArray {
         reverse(array, 0, array.size - 1)
     } catch (exception: ArrayIndexOutOfBoundsException) {
         println("FirstBoard index is out of array bounds")
-        return array
+        throw exception
     }
 
     return array
