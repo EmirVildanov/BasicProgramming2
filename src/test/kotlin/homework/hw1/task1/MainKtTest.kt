@@ -3,7 +3,6 @@ package homework.hw1.task1
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.assertArrayEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 
 internal class MainKtTest {
 
@@ -35,21 +34,5 @@ internal class MainKtTest {
         assertingArray[8] = 6
         assertingArray[9] = 7
         assertArrayEquals(assertingArray, rearrangeArrayParts(testArray, 7))
-    }
-
-    @Test
-    fun shouldThrowAnExceptionBecauseOfNegativeIndex() {
-        val testArray = IntArray(6) { it + 1 }
-        assertThrows(ArrayIndexOutOfBoundsException::class.java) {
-            rearrangeArrayParts(testArray, -1)
-        }
-    }
-
-    @Test
-    fun shouldThrowAnExceptionBecauseOutOfBoundsIndex() {
-        val testArray = IntArray(6) { it + 1 }
-        assertThrows(ArrayIndexOutOfBoundsException::class.java) {
-            rearrangeArrayParts(testArray, -1)
-        }
     }
 }
