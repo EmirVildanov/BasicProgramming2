@@ -1,24 +1,15 @@
-package hwFirst.taskOne
+package homework.hw1.task1
 
-fun reverse(array: IntArray, start: Int, end: Int) {
-    val length: Int = (end - start + 1) / 2
-    for (i in 0 until length) {
-        val temporary: Int = array[start + i]
-        array[start + i] = array[end - i]
-        array[end - i] = temporary
-    }
-}
 
 fun rearrangeArrayParts(array: IntArray, firstBoard: Int): IntArray {
     try {
-        reverse(array, 0, firstBoard - 1)
-        reverse(array, firstBoard, array.size - 1)
-        reverse(array, 0, array.size - 1)
+        array.toMutableList().subList(0, firstBoard - 1).reverse()
+        array.toMutableList().subList(firstBoard, array.size - 1).reverse()
+        array.toMutableList().subList(0, array.size - 1).reverse()
     } catch (exception: ArrayIndexOutOfBoundsException) {
         println("FirstBoard index is out of array bounds")
         throw exception
     }
-
     return array
 }
 
@@ -36,7 +27,7 @@ fun main() {
         }
         rearrangeArrayParts(array, firstBoard)
         print("The answer is : ${array.joinToString(" ")}")
-    } catch (exception: NumberFormatException){
+    } catch (exception: NumberFormatException) {
         print("Wrong input data format")
     }
 }

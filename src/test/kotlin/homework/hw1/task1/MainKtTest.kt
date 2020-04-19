@@ -1,8 +1,9 @@
-package hwFirst.taskOne
+package homework.hw1.task1
 
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertArrayEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 
 internal class MainKtTest {
 
