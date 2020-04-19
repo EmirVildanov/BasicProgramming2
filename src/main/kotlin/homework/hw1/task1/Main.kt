@@ -1,7 +1,5 @@
 package homework.hw1.task1
 
-import java.lang.IllegalArgumentException
-
 fun rearrangeArrayParts(array: IntArray, firstBoard: Int): IntArray {
     array.toMutableList().subList(0, firstBoard - 1).reverse()
     array.toMutableList().subList(firstBoard, array.size - 1).reverse()
