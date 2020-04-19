@@ -1,10 +1,11 @@
 package homework.hw1.task1
 
 fun rearrangeArrayParts(array: IntArray, firstBoard: Int): IntArray {
-    array.toMutableList().subList(0, firstBoard - 1).reverse()
-    array.toMutableList().subList(firstBoard, array.size - 1).reverse()
-    array.toMutableList().subList(0, array.size - 1).reverse()
-    return array
+    val listArray = array.toMutableList()
+    listArray.subList(0, firstBoard).reverse()
+    listArray.subList(firstBoard, array.size).reverse()
+    listArray.subList(0, array.size).reverse()
+    return listArray.toIntArray()
 }
 
 fun main() {
