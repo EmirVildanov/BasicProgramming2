@@ -1,65 +1,57 @@
+package homework.hw4.task1
+
 import java.io.File
 import kotlin.math.abs
 
-/*
-Общение с пользователем должно происходит в интерактивном режиме:
-добавить значение в хеш-таблицу, удалить значение из хеш-таблицы,
- поиск значения в хеш-таблице, показать статистику по хеш-таблице,
- заполнить хеш-таблицу содержимым файла,
- выбрать хеш-функцию для подсчета хеша (из заранее заданных в коде).
-  */
+const val FIRST_BUCKETS_NUMBER = 20
+const val LOAD_FACTOR_MAXIMUM = 0.9
+const val HASH_PRIME_NUMBER_FOR_FIRST_HASH_FUNCTION = 3
+const val FIRST_HELP_VALUE_FOR_FIRST_HASH_FUNCTION = 63689
+const val SECOND_HASH_HELP_VALUE_FOR_FIRST_HASH_FUNCTION = 378551
 
-const val firstBucketsNumber = 20
-const val hashPrimeNumberForFirstHashFunction = 3
-const val firstHelpValueForSecondHashFunction = 63689
-const val secondHelpValueForSecondHashFunction = 378551
-
-class Hashtable() {
+class Hashtable {
     private var bucketsArray = mutableListOf<Bucket>()
-    private var loadFactor: Float = 0F
-    private var hashFunction: (String) -> Int = ::firstHashFunction
-    private var size = firstBucketsNumber
-    private val words = mutableSetOf<String>()
-    private var expansionNumber: Int = 0
+    private var loadFactor = 0.0
+    var hashFunction: (String) -> Int = ::firstHashFunction
+    val words = mutableSetOf<String>()
+    var expansionNumber: Int = 0
 
     init {
-        for (i in 0 until firstBucketsNumber) {
+        for (i in 0 until FIRST_BUCKETS_NUMBER) {
             this.bucketsArray.add(Bucket())
         }
     }
 
-    class Bucket() {
+    class Bucket {
         var conflictsNumber = 0
         var words = mutableListOf<String>()
     }
 
     private fun firstHashFunction(string: String): Int {
-        var numberPower = 1;
-        var hashNumber = 0;
+        var numberPower = 1
+        var hashNumber = 0
         for (element in string) {
             hashNumber += (element - 'a' + 1) * numberPower
-            numberPower *= hashPrimeNumberForFirstHashFunction
+            numberPower *= HASH_PRIME_NUMBER_FOR_FIRST_HASH_FUNCTION
         }
-        //abs because in case of big words it will return negative answer
-        return abs(hashNumber % bucketsArray.size);
+        return abs(hashNumber % bucketsArray.size)
     }
 
     private fun secondHashFunction(string: String): Int {
-        var firstHashHelpNumber = firstHelpValueForSecondHashFunction
+        var firstHashHelpNumber = FIRST_HELP_VALUE_FOR_FIRST_HASH_FUNCTION
         var hashNumber = 0
 
         string.forEach {
             hashNumber = hashNumber * firstHashHelpNumber + it.toInt()
-            firstHashHelpNumber *= secondHelpValueForSecondHashFunction
+            firstHashHelpNumber *= SECOND_HASH_HELP_VALUE_FOR_FIRST_HASH_FUNCTION
         }
-        //abs because in case of big words it will return negative answer
         return abs(hashNumber % bucketsArray.size)
     }
 
     private fun redefineHashValues() {
-        val wordsArray = ArrayList<String>(words.size);
+        val wordsArray = ArrayList<String>(words.size)
         bucketsArray.forEach {
-            if (!it.words.isEmpty()) {
+            if (it.words.isNotEmpty()) {
                 wordsArray.addAll(it.words)
                 it.words.clear()
                 it.conflictsNumber = 0
@@ -71,11 +63,12 @@ class Hashtable() {
     }
 
     fun add(currentWord: String) {
-        if (loadFactor >= 0.9) {
-            for (i in 0 until firstBucketsNumber) {
+        if (loadFactor >= LOAD_FACTOR_MAXIMUM) {
+            for (i in 0 until FIRST_BUCKETS_NUMBER) {
                 bucketsArray.add(Bucket())
             }
             this.expansionNumber += 1
+            loadFactor = words.size.toDouble() / bucketsArray.size.toDouble()
             redefineHashValues()
         }
         val hashIndex = hashFunction(currentWord)
@@ -84,19 +77,18 @@ class Hashtable() {
         }
         bucketsArray[hashIndex].words.add(currentWord)
         words.add(currentWord)
-        loadFactor = words.size.toFloat() / bucketsArray.size.toFloat()
+        loadFactor = words.size.toDouble() / bucketsArray.size.toDouble()
     }
 
     fun addFromFile(file: File) {
-        val bufferedReader= file.bufferedReader()
+        val bufferedReader = file.bufferedReader()
         val words = mutableSetOf<String>()
         bufferedReader.useLines { lines -> lines.forEach { words.addAll(it.split(" ")) } }
         words.forEach { this.add(it) }
     }
 
     fun remove(word: String): Boolean {
-        if (!words.contains(word))
-        {
+        if (!words.contains(word)) {
             return false
         }
         bucketsArray.forEach {
@@ -105,7 +97,7 @@ class Hashtable() {
             }
         }
         words.remove(word)
-        loadFactor = words.size.toFloat() / bucketsArray.size.toFloat()
+        loadFactor = words.size.toDouble() / bucketsArray.size.toDouble()
         return true
     }
 
@@ -117,33 +109,35 @@ class Hashtable() {
         redefineHashValues()
     }
 
-    fun find(word: String): Boolean {
-        return words.contains(word)
-    }
-
-//functions to print statistics
-
-    private fun findMaxConflictsNumber(): Int {
-        var maxNumber = 0;
-        bucketsArray.forEach {
-            if (it.conflictsNumber > maxNumber) {
-                maxNumber = it.conflictsNumber
-            }
-        }
-        return maxNumber;
-    }
-
     fun printStatistics() {
         println("Load factor is : $loadFactor")
         println("The number of expansions is : $expansionNumber")
-        println("The max number of searching attempts is : ${findMaxConflictsNumber()}")
+        var maxConfictsNumber = 0
+        bucketsArray.forEach {
+            if (it.conflictsNumber > maxConfictsNumber) {
+                maxConfictsNumber = it.conflictsNumber
+            }
+        }
+        println("The max number of searching attempts is : $maxConfictsNumber")
         print("Number of conflicts in each bucket: ")
         bucketsArray.forEach { print("${it.conflictsNumber} ") }
         println("")
         println("The number of added words is : ${words.size}")
         println("The number of empty buckets is : ${bucketsArray.size - words.size}")
         println("Words are: ")
-        bucketsArray.forEach { it.words.forEach { print("$it ") } }
+        bucketsArray.forEach { it -> it.words.forEach { print("$it ") } }
         println(" \n")
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return if (other is Hashtable) {
+            this.words.containsAll(words)
+        } else {
+            false
+        }
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
     }
 }
