@@ -1,7 +1,16 @@
-import org.junit.Test
-import kotlin.test.assertEquals
+package homework.hw1.task2
+
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalArgumentException
 
 internal class MainKtTest {
+
+    @Test
+    fun shouldThrowIllegalArgumentException() {
+        assertThrows<IllegalArgumentException> { recursiveFactorial(-5) }
+    }
 
     @Test
     fun shouldReturnRecursiveFactorialOf0() {
@@ -51,5 +60,10 @@ internal class MainKtTest {
     @Test
     fun shouldReturnIterativeFactorialOf4() {
         assertEquals(24, iterativeFactorial(4))
+    }
+
+    @Test
+    fun shouldReturnRecursiveFactorialOf11() {
+        assertEquals(39916800, recursiveFactorial(11))
     }
 }

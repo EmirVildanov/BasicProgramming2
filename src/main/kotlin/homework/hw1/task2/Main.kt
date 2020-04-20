@@ -1,6 +1,12 @@
+package homework.hw1.task2
+
+import java.lang.IllegalArgumentException
 import java.util.Scanner
 
 fun recursiveFactorial(number: Int): Int {
+    if (number < 0) {
+        throw IllegalArgumentException("Negative number")
+    }
     return if (number == 0) {
         1
     } else {
@@ -9,6 +15,9 @@ fun recursiveFactorial(number: Int): Int {
 }
 
 fun iterativeFactorial(number: Int): Int {
+    if (number < 0) {
+        throw IllegalArgumentException("Negative number")
+    }
     var answer = 1
     for (i in 1..number) {
         answer *= i
