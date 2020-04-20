@@ -1,4 +1,4 @@
-package hwFirst.taskFive
+package homework.hw1.task5
 
 import countNonEmptyLines
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -24,6 +24,10 @@ internal class MainKtTest {
 
     @Test
     fun shouldReturn7OnFileWithManyEmptyLinesContainingDifferentEmptySymbols() {
-        assertEquals(7, countNonEmptyLines(File("src/test/kotlin/hwFirst/taskFive/testFileWithManyEmptyLinesContainingDifferentEmptySymbols")))
+        assertEquals(
+            7,
+            countNonEmptyLines(File("src/test/kotlin/hwFirst/taskFive/" +
+                    "testFileWithManyEmptyLinesContainingDifferentEmptySymbols"))
+        )
     }
 }

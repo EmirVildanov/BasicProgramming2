@@ -1,13 +1,7 @@
 import java.io.File
 
 fun countNonEmptyLines(file: File): Int {
-    var answer = 0
-    for (line in file.readLines()) {
-        if (!line.isBlank()) {
-            answer++
-        }
-    }
-    return answer
+    return file.readLines().count { !it.isBlank() }
 }
 
 fun main() {
