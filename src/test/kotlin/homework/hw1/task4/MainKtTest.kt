@@ -1,6 +1,9 @@
-import org.junit.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+package homework.hw1.task4
+
+import checkIfPalindrome
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 internal class MainKtTest {
 
