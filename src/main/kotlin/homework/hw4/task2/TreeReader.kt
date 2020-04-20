@@ -1,45 +1,45 @@
+package homework.hw4.task2
+
 import java.io.BufferedReader
 import java.io.File
 
-class TreeReader(private val file: File) {
-    private var root: Node = Node()
+class TreeReader(file: File) {
+    var root: Node = Node()
     var value = 0
-        get() = field
 
-    class Node() {
-        var operandValue: Int? = null
-        var operationValue: Char? = null
+    class Node {
+        private var operandValue: Int? = null
+        private var operationValue: Char? = null
         var leftChild: Node? = null
         var rightChild: Node? = null
 
         private fun isNumber(string: String): Boolean {
             for (element in string) {
-                if (!element.isDigit())
+                if (!element.isDigit()) {
                     return false
+                }
             }
             return true
         }
 
         fun calculateValue(): Int {
-            var firstValue = 0
-            var secondValue = 0
-            if (leftChild!!.operandValue != null) {
-                firstValue = leftChild!!.operandValue!!
+            val firstValue: Int = if (leftChild!!.operandValue != null) {
+                leftChild!!.operandValue!!
             } else {
-                firstValue = leftChild!!.calculateValue()
+                leftChild!!.calculateValue()
             }
-            if (rightChild!!.operandValue != null) {
-                secondValue = rightChild!!.operandValue!!
+            val secondValue: Int = if (rightChild!!.operandValue != null) {
+                rightChild!!.operandValue!!
             } else {
-                secondValue = rightChild!!.calculateValue()
+                rightChild!!.calculateValue()
             }
-            when (operationValue) {
-                '+' -> return firstValue + secondValue
-                '-' -> return firstValue - secondValue
-                '*' -> return firstValue * secondValue
-                '/' -> return firstValue / secondValue
+            return when (operationValue) {
+                '+' -> firstValue + secondValue
+                '-' -> firstValue - secondValue
+                '*' -> firstValue * secondValue
+                '/' -> firstValue / secondValue
+                else -> 0
             }
-            return 0
         }
 
         fun splitUpTree(treeString: String) {
@@ -69,15 +69,15 @@ class TreeReader(private val file: File) {
         private fun getTreeView(): String {
             var stringTree = ""
             stringTree += "$operationValue "
-            if (leftChild!!.operandValue != null) {
-                stringTree += "${leftChild!!.operandValue} "
+            stringTree += if (leftChild!!.operandValue != null) {
+                "${leftChild!!.operandValue} "
             } else {
-                stringTree += "(" + leftChild!!.getTreeView() + ") "
+                "(" + leftChild!!.getTreeView() + ") "
             }
-            if (rightChild!!.operandValue != null) {
-                stringTree += "${rightChild!!.operandValue} "
+            stringTree += if (rightChild!!.operandValue != null) {
+                "${rightChild!!.operandValue} "
             } else {
-                stringTree += "(" + rightChild!!.getTreeView() + ") "
+                "(" + rightChild!!.getTreeView() + ") "
             }
             return stringTree
         }

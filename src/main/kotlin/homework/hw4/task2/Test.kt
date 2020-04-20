@@ -1,3 +1,5 @@
+package homework.hw4.task2
+
 import java.io.File
 
 fun main() {
