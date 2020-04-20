@@ -1,4 +1,4 @@
-import java.util.*
+import java.util.Scanner
 import kotlin.collections.ArrayList
 
 fun deleteRepeatingElements(array: ArrayList<Int>) {
