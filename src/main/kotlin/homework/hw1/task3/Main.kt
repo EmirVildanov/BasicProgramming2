@@ -5,7 +5,7 @@ fun countSubstringOccurrence(firstString: String, secondString: String): Int {
     for (i in firstString.indices) {
         for (j in secondString.indices) {
             if (i + j > firstString.length - 1 || firstString[i + j] != secondString[j]) {
-                break;
+                break
             }
             if (j == secondString.length - 1) {
                 ++answer

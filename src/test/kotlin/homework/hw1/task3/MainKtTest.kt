@@ -1,5 +1,8 @@
-import org.junit.Test
-import kotlin.test.assertEquals
+package homework.hw1.task3
+
+import countSubstringOccurrence
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 internal class MainKtTest {
 
