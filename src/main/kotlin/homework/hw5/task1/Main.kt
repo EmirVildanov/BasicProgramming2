@@ -1,4 +1,5 @@
-import hwFifth.taskOne.Trie
+package homework.hw5.task1
+
 import java.io.File
 import java.io.InputStream
 
@@ -15,8 +16,8 @@ fun main() {
     println(trie.contains("hi"))
     println(trie.size())
     println(trie.howManyStartWithPrefix("hi"))
-    val outputStream = File("src/main/kotlin/hwFifth/taskOne/testWrite").outputStream()
-    val inputStream: InputStream = File("src/main/kotlin/hwFifth/taskOne/testRead").inputStream()
+    val outputStream = File("src/homework.hw5.task1.main/kotlin/hwFifth/taskOne/testWrite").outputStream()
+    val inputStream: InputStream = File("src/homework.hw5.task1.main/kotlin/hwFifth/taskOne/testRead").inputStream()
     trie.serialize(outputStream)
     trie.deserialize(inputStream)
 

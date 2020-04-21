@@ -1,4 +1,4 @@
-package hwFifth.taskOne
+package homework.hw5.task1
 
 import java.io.InputStream
 import java.io.OutputStream

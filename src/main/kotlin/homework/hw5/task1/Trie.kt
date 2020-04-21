@@ -1,39 +1,36 @@
-package hwFifth.taskOne
+package homework.hw5.task1
 
 import java.io.InputStream
 import java.io.OutputStream
 
-const val alphabetSize = 26
-const val firstVertexIndex = 0
+const val ALPHABET_SIZE = 26
+const val FIRST_VERTEX_INDEX = 0
 
 class Trie : Serializable {
 
-    var vertices = mutableListOf<Vertex>()
-    var words = mutableListOf<String>()
+    private var vertices = mutableListOf<Vertex>()
+    private var words = mutableListOf<String>()
 
     init {
         vertices.add(Vertex())
     }
 
-    class Vertex() {
-        val next: MutableList<Vertex?> = MutableList(alphabetSize) { null }
+    class Vertex {
+        val next: MutableList<Vertex?> = MutableList(ALPHABET_SIZE) { null }
         var isLeaf = false
 
         fun countLeafChildrenNumber(vertices: MutableList<Vertex>): Int {
-            if (this.hasChildren()) {
+            return if (this.hasChildren()) {
                 var answer = 0
                 this.next.forEach {
-                    if (it != null) {
-                        answer += if (it.isLeaf) {
-                            1 + it.countLeafChildrenNumber(vertices)
-                        } else {
-                            it.countLeafChildrenNumber(vertices)
-                        }
+                    if (it != null && it.isLeaf) {
+                        answer += 1 + it.countLeafChildrenNumber(vertices)
+                    } else if (it != null) {
+                        answer += it.countLeafChildrenNumber(vertices)
                     }
                 }
-                return answer
-            }
-            return 0
+                answer
+            } else { 0 }
         }
 
         fun hasChildren(): Boolean {
@@ -55,7 +52,7 @@ class Trie : Serializable {
             return false
         }
         words.add(element)
-        var currentVertex = vertices[firstVertexIndex]
+        var currentVertex = vertices[FIRST_VERTEX_INDEX]
         for (char in element) {
             val currentCharIndex = char.toInt() - 'a'.toInt()
             if (currentVertex.next[currentCharIndex] == null) {
@@ -78,7 +75,7 @@ class Trie : Serializable {
             return false
         }
         words.remove(element)
-        var currentVertex = vertices[firstVertexIndex]
+        var currentVertex = vertices[FIRST_VERTEX_INDEX]
         val verticesArray = mutableListOf<Vertex>()
         for (char in element) {
             verticesArray.add(currentVertex)
@@ -93,20 +90,18 @@ class Trie : Serializable {
                 } else {
                     vertices.remove(verticesArray[i + 1])
                 }
-                break
             } else if (verticesArray[i + 1].countLeafChildrenNumber(vertices) == 1) {
                 verticesArray[i].next.remove(verticesArray[i + 1])
                 for (j in i + 1 until verticesArray.size) {
                     vertices.remove(verticesArray[j])
                 }
-                break
             }
         }
         return true
     }
 
     fun howManyStartWithPrefix(prefix: String): Int {
-        var currentVertex = vertices[firstVertexIndex]
+        var currentVertex = vertices[FIRST_VERTEX_INDEX]
         var appropriateVerticesNumber = 0
         for (char in prefix) {
             val currentCharIndex = char.toInt() - 'a'.toInt()
@@ -118,8 +113,7 @@ class Trie : Serializable {
         if (currentVertex.isLeaf) {
             appropriateVerticesNumber = 1
         }
-        appropriateVerticesNumber += currentVertex.countLeafChildrenNumber(vertices)//kostyl
-        val adsf = currentVertex.isLeaf
+        appropriateVerticesNumber += currentVertex.countLeafChildrenNumber(vertices)
         return appropriateVerticesNumber
     }
 
