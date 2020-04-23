@@ -30,10 +30,10 @@ dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.6.0")
 }
 
-javafx {
-    version = "14"
-    modules("javafx.controls")
-}
+//javafx {
+//    version = "14"
+//    modules("javafx.controls")
+//}
 
 detekt {
     failFast = true // fail build on any finding
