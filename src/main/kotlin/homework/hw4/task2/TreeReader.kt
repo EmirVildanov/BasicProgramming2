@@ -45,6 +45,7 @@ class TreeReader(file: File) {
         fun splitUpTree(treeString: String) {
             val operation = treeString[1]
             operationValue = operation
+            val bracesPattern = "[(].+[)]".toRegex()
             val treePattern = "[(][-+*/]\\s+(\\d+|[(].+[)])\\s+(\\d+|[(].+[)])[)]".toRegex()
             val firstPart = treePattern.find(treeString)?.groupValues?.get(1)
             val secondPart = treePattern.find(treeString)?.groupValues?.get(2)
