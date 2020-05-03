@@ -20,6 +20,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     implementation("org.junit.jupiter:junit-jupiter-engine:5.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
 //    implementation("de.jensd:fontawesomefx-weathericons:2.0.10-9.1.2")
     implementation("no.tornado:tornadofx:1.7.20")
 
