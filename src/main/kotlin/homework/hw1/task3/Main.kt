@@ -1,15 +1,15 @@
+package homework.hw1.task3
+
 import java.util.Scanner
 
 fun countSubstringOccurrence(firstString: String, secondString: String): Int {
     var answer = 0
     for (i in firstString.indices) {
-        for (j in secondString.indices) {
-            if (i + j > firstString.length - 1 || firstString[i + j] != secondString[j]) {
-                break
-            }
-            if (j == secondString.length - 1) {
-                ++answer
-            }
+        if (i + secondString.length > firstString.length) {
+            break
+        }
+        if (secondString != "" && firstString.substring(i, i + secondString.length) == secondString) {
+            answer++
         }
     }
     return answer
