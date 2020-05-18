@@ -2,126 +2,125 @@ package homework.hw3.task1
 
 import java.lang.IllegalArgumentException
 
-const val BALANCE_FACTOR_ERROR_VALUE = -3
-const val BALANCE_FACTOR_TWO = 2
-const val BALANCE_FACTOR_MINUS_TWO = -2
+class AVLTree<K, V> : Map<K, V> where K : Comparable<K> {
 
-open class AVLTree<K, V>(
-    private var root: Pair<K, V>? = null,
-    override val entries: MutableSet<Map.Entry<K, V>> = mutableSetOf(),
-    override val keys: MutableSet<K> = mutableSetOf(),
-    override var size: Int = 0,
+    companion object {
+        private const val BALANCE_FACTOR_MINUS_TWO = -2
+        private const val BALANCE_FACTOR_ERROR_VALUE = -3
+        private const val BALANCE_FACTOR_TWO = 2
+    }
+
+    private var root: Node<K, V>? = null
+    override val entries: MutableSet<Map.Entry<K, V>> = mutableSetOf()
+    override val keys: MutableSet<K> = mutableSetOf()
+    override var size: Int = 0
     override val values: MutableList<V> = mutableListOf()
-) : Map<K, V> where K : Comparable<K> {
 
-    class Pair<K, V>(
+    data class Node<K, V>(
         override var key: K,
-        override var value: V,
-        var height: Int = 1,
-        var leftChild: Pair<K, V>? = null,
-        var rightChild: Pair<K, V>? = null,
-        var parent: Pair<K, V>? = null
-    ) : Map.Entry<K, V>
+        override var value: V
+    ) : Map.Entry<K, V> {
+
+        var height: Int = 1
+        var leftChild: Node<K, V>? = null
+        var rightChild: Node<K, V>? = null
+        var parent: Node<K, V>? = null
+    }
 
     inner class Balancer {
-        fun findNewRoot(pair: Pair<K, V>?): Pair<K, V>? {
-            if (pair == null) {
+        fun findNewRoot(node: Node<K, V>?): Node<K, V>? {
+            if (node == null) {
                 return null
             }
-            var minRightElement = pair.rightChild
+            var minRightElement = node.rightChild
             while (minRightElement?.leftChild != null) {
                 minRightElement = minRightElement.leftChild
             }
             return minRightElement
         }
 
-        private fun findHeight(pair: Pair<K, V>?): Int {
-            if (pair == null) {
-                return 0
-            }
-            return pair.height
-        }
+        private fun getNodeHeight(node: Node<K, V>?): Int = node?.height ?: 0
 
-        private fun findBalanceFactor(pair: Pair<K, V>?): Int {
-            if (pair == null) {
-                return BALANCE_FACTOR_ERROR_VALUE
-            }
-            return findHeight(pair.rightChild) - findHeight(pair.leftChild)
-        }
+        private fun getNodeBalanceFactor(node: Node<K, V>?): Int =
+            getNodeHeight(node?.rightChild) - getNodeHeight(node?.leftChild) ?: BALANCE_FACTOR_ERROR_VALUE
 
-        private fun updateHeight(pair: Pair<K, V>?) {
-            if (pair == null) {
+        private fun updateHeight(node: Node<K, V>?) {
+            if (node == null) {
                 return
             }
-            val rightChildHeight = findHeight(pair.rightChild)
-            val leftChildHeight = findHeight(pair.leftChild)
+            val rightChildHeight = getNodeHeight(node.rightChild)
+            val leftChildHeight = getNodeHeight(node.leftChild)
             if (rightChildHeight > leftChildHeight) {
-                pair.height = rightChildHeight + 1
+                node.height = rightChildHeight + 1
             } else {
-                pair.height = leftChildHeight + 1
+                node.height = leftChildHeight + 1
             }
         }
 
-        private fun rotate(pair: Pair<K, V>, side: String): Pair<K, V> {
-            if (side != "left" && side != "right") {
-                throw IllegalArgumentException("Wrong side argument")
+        private fun rotateRight(node: Node<K, V>): Node<K, V> {
+            if (node == null) {
+                return null
             }
-            val newNode: Pair<K, V>?
-            if (side == "left") {
-                newNode = pair.rightChild
-                pair.rightChild = newNode?.leftChild
-                if (pair.rightChild != null) {
-                    pair.rightChild!!.parent = pair
-                }
-                when (pair) {
-                    root -> root = newNode
-                    pair.parent?.leftChild -> pair.parent?.leftChild = newNode
-                    else -> pair.parent?.rightChild = newNode
-                }
-                newNode?.leftChild = pair
-            } else {
-                newNode = pair.leftChild
-                pair.leftChild = newNode?.rightChild
-                if (pair.leftChild != null) {
-                    pair.leftChild!!.parent = pair
-                }
-                when (pair) {
-                    root -> return newNode!!
-                    pair.parent?.leftChild -> pair.parent?.leftChild = newNode
-                    else -> pair.parent?.rightChild = newNode
-                }
-                newNode?.rightChild = pair
+            //, side: KProperty<Pair<K, V>>
+            val newNode = node.leftChild
+            newNode?.parent = node.parent
+            node.leftChild = newNode?.rightChild
+            if (node.leftChild != null) {
+                node.leftChild?.parent = node
             }
-            newNode?.parent = pair.parent
-            pair.parent = newNode
-            updateHeight(pair)
+            when (node) {
+                root -> return newNode
+                node.parent?.leftChild -> node.parent?.leftChild = newNode
+                else -> node.parent?.rightChild = newNode
+            }
+            newNode?.rightChild = node
+            node.parent = newNode
+            updateHeight(node)
             updateHeight(newNode)
-            return newNode!!
+            return newNode
         }
 
-        fun balance(pair: Pair<K, V>): Pair<K, V> {
-            updateHeight(pair)
-            return when (findBalanceFactor(pair)) {
+        private fun rotateLeft(node: Node<K, V>): Node<K, V> {
+            val newNode = node.rightChild
+            newNode?.parent = node.parent
+            node.rightChild = newNode?.leftChild
+            if (node.rightChild != null) {
+                node.rightChild?.parent = node
+            }
+            when (node) {
+                root -> root = newNode
+                node.parent?.leftChild -> node.parent?.leftChild = newNode
+                else -> node.parent?.rightChild = newNode
+            }
+            newNode?.leftChild = node
+            node.parent = newNode
+            updateHeight(node)
+            updateHeight(newNode)
+            return newNode
+        }
+
+        fun balance(node: Node<K, V>): Node<K, V> {
+            return when (getNodeBalanceFactor(node)) {
                 BALANCE_FACTOR_TWO -> {
-                    if (findBalanceFactor(pair.rightChild) < 0) {
-                        pair.rightChild = rotate(pair.rightChild!!, "right")
+                    if (getNodeBalanceFactor(node.rightChild) < 0) {
+                        node.rightChild = rotateRight(node.rightChild!!)
                     }
-                    rotate(pair, "left")
+                    rotateLeft(node)
                 }
-                BALANCE_FACTOR_MINUS_TWO -> {
-                    if (findBalanceFactor(pair.leftChild) > 0) {
-                        pair.leftChild = rotate(pair.leftChild!!, "left")
+                Companion.BALANCE_FACTOR_MINUS_TWO -> {
+                    if (getNodeBalanceFactor(node.leftChild) > 0) {
+                        node.leftChild = rotateLeft(node.leftChild!!)
                     }
-                    rotate(pair, "right")
+                    rotateRight(node)
                 }
                 else -> {
-                    pair
+                    node
                 }
             }
         }
 
-        fun balanceParents(pair: Pair<K, V>) {
-            var currentPair = pair
+        fun balanceParents(node: Node<K, V>) {
+            var currentPair = node
             while (currentPair != root) {
                 balance(currentPair.parent!!)
                 if (currentPair != root) {
@@ -131,28 +130,26 @@ open class AVLTree<K, V>(
         }
     }
 
-    inner class Printer {
-        private fun processPrint(pair: Pair<K, V>?) {
-            if (pair == null) {
-                print("null ")
-            } else {
-                print("(")
-                print("${pair.key} ")
-                processPrint(pair.leftChild)
-                processPrint(pair.rightChild)
-                print(") ")
-            }
+    private fun processPrint(node: Node<K, V>?, currentString: String): String {
+        if (node == null) {
+            currentString += "null "
+        } else {
+            currentString += "("
+            currentString += "${node.key} "
+            processPrint(node.leftChild, currentString)
+            processPrint(node.rightChild, currentString)
+            currentString += ") "
         }
+        return currentString
+    }
 
-        fun print() {
-            print("The hole set : ")
-            processPrint(root)
-            print("\n")
-        }
+    override fun toString(): String {
+        var currentString = ""
+        return processPrint(root, currentString) + "\n"
     }
 
     inner class Deleter {
-        fun findElementToDelete(value: K): Pair<K, V>? {
+        fun findElementToDelete(value: K): Node<K, V>? {
             var currentPair = root
             loop@ while (true) {
                 currentPair = when {
@@ -189,50 +186,50 @@ open class AVLTree<K, V>(
             }
         }
 
-        fun deleteLeftChild(currentPair: Pair<K, V>?) {
-            if (currentPair == null) {
+        fun deleteLeftChild(currentNode: Node<K, V>?) {
+            if (currentNode == null) {
                 return
             }
-            if (currentPair.leftChild == null && currentPair.rightChild == null) {
-                currentPair.parent?.leftChild = null
+            if (currentNode.leftChild == null && currentNode.rightChild == null) {
+                currentNode.parent?.leftChild = null
                 --size
-            } else if (currentPair.leftChild == null) {
-                currentPair.parent?.leftChild = currentPair.rightChild
-                currentPair.rightChild?.parent = currentPair.parent
+            } else if (currentNode.leftChild == null) {
+                currentNode.parent?.leftChild = currentNode.rightChild
+                currentNode.rightChild?.parent = currentNode.parent
                 --size
-            } else if (currentPair.rightChild == null) {
-                currentPair.parent?.leftChild = currentPair.leftChild
-                currentPair.leftChild?.parent = currentPair.parent
+            } else if (currentNode.rightChild == null) {
+                currentNode.parent?.leftChild = currentNode.leftChild
+                currentNode.leftChild?.parent = currentNode.parent
                 --size
             } else {
-                val newRoot = Balancer().findNewRoot(currentPair) ?: return
+                val newRoot = Balancer().findNewRoot(currentNode) ?: return
                 val rememberKey = newRoot.key
                 remove(rememberKey)
-                currentPair.key = rememberKey
+                currentNode.key = rememberKey
             }
         }
 
-        fun deleteRightChild(currentPair: Pair<K, V>?) {
-            if (currentPair == null) {
+        fun deleteRightChild(currentNode: Node<K, V>?) {
+            if (currentNode == null) {
                 return
             }
-            if (currentPair.leftChild == null && currentPair.rightChild == null) {
-                currentPair.parent?.rightChild = null
+            if (currentNode.leftChild == null && currentNode.rightChild == null) {
+                currentNode.parent?.rightChild = null
                 --size
-            } else if (currentPair.leftChild == null) {
-                currentPair.parent?.rightChild = currentPair.rightChild
-                currentPair.rightChild?.parent = currentPair.parent
+            } else if (currentNode.leftChild == null) {
+                currentNode.parent?.rightChild = currentNode.rightChild
+                currentNode.rightChild?.parent = currentNode.parent
                 --size
-            } else if (currentPair.rightChild == null) {
-                currentPair.parent?.rightChild = currentPair.leftChild
-                currentPair.leftChild?.parent = currentPair.parent
+            } else if (currentNode.rightChild == null) {
+                currentNode.parent?.rightChild = currentNode.leftChild
+                currentNode.leftChild?.parent = currentNode.parent
                 --size
             } else {
-                val newRoot = Balancer().findNewRoot(currentPair) ?: return
+                val newRoot = Balancer().findNewRoot(currentNode) ?: return
                 val rememberKey = newRoot.key
                 remove(rememberKey)
-                currentPair.key = rememberKey
-                currentPair.value = newRoot.value
+                currentNode.key = rememberKey
+                currentNode.value = newRoot.value
             }
         }
     }
@@ -241,13 +238,9 @@ open class AVLTree<K, V>(
         return keys.contains(key)
     }
 
-    override fun containsValue(value: V): Boolean {
-        return values.contains(value)
-    }
+    override fun containsValue(value: V): Boolean = values.contains(value)
 
-    override fun isEmpty(): Boolean {
-        return root == null
-    }
+    override fun isEmpty(): Boolean = root == null
 
     override fun get(key: K): V? {
         var currentPair = root
@@ -262,7 +255,7 @@ open class AVLTree<K, V>(
     }
 
     fun put(key: K, value: V): V? {
-        val newPair = Pair(key, value)
+        val newPair = Node(key, value)
         var checkInsert = false
         if (root == null) {
             root = newPair
@@ -343,7 +336,8 @@ open class AVLTree<K, V>(
             if (values.size != other.size) {
                 equalCheck = false
             }
-            other.values.forEach { if (!values.contains(it)) {
+            other.values.forEach {
+                if (!values.contains(it)) {
                     equalCheck = false
                 }
             }
