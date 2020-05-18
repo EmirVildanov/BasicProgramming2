@@ -1,3 +1,5 @@
+package homework.hw2.task1
+
 import java.util.Scanner
 
 fun main() {
