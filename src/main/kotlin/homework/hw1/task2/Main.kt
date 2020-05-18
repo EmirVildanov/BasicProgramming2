@@ -29,6 +29,10 @@ fun main() {
     val scan = Scanner(System.`in`)
     print("Enter the number: ")
     val input: Int = scan.nextInt()
-    println("The recursive function answer is: ${recursiveFactorial(input)}")
-    println("The iterative function answer is: ${iterativeFactorial(input)}")
+    try {
+        println("The recursive function answer is: ${recursiveFactorial(input)}")
+        println("The iterative function answer is: ${iterativeFactorial(input)}")
+    } catch (e: IllegalArgumentException) {
+        println("You entered illegal argument")
+    }
 }
