@@ -1,7 +1,6 @@
 import java.util.Scanner
-import kotlin.collections.ArrayList
 
-fun deleteRepeatingElements(array: ArrayList<Int>) {
+fun deleteRepeatingElements(array: MutableList<Int>) {
     array.reverse()
     var index: Int
     for (i in 0 until array.size) {
@@ -24,12 +23,11 @@ fun main() {
     val scan = Scanner(System.`in`)
     print("Enter the length of your array : ")
     val length: Int = scan.nextInt()
-    val array = ArrayList<Int>()
     print("Enter $length elements of the array : ")
-    for (i in 0 until length) {
-        array.add(scan.nextInt())
+    val array = readLine()?.split(' ')?.map { it.toInt() }?.toMutableList()
+    if (array != null) {
+        deleteRepeatingElements(array)
+        print("Your array after transformation is : ")
+        array.forEach { print("$it ") }
     }
-    deleteRepeatingElements(array)
-    print("Your array after transformation is : ")
-    array.forEach { print("$it ") }
 }
