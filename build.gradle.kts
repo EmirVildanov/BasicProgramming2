@@ -40,6 +40,8 @@ dependencies {
 
     implementation("io.ktor:ktor-client-apache:1.3.1")
 
+    implementation("io.ktor:ktor-auth:1.3.1")
+
     implementation("com.github.spoptchev:scientist:1.0.2")
     implementation("com.github.squirrelgrip:Scientist4K:0.3.3")
     implementation("scientifik:plotlykt-server:0.1.1")
