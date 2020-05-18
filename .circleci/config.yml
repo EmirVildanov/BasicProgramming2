@@ -9,7 +9,7 @@ jobs:
           path: ~/repo
       - run:
           name: Run Detekt
-          command: ./gradlew detekt
+          command: ./gradlew detekt.gradle
       - run:
           name: Run Unit tests
           command: ./gradlew test
