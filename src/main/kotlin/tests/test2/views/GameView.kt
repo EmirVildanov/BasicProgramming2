@@ -1,7 +1,6 @@
 package tests.test2.views
 
 import tests.test2.Game
-import tests.test2.Tile
 import tornadofx.View
 import tornadofx.hbox
 import tornadofx.vbox
