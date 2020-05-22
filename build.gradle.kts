@@ -50,10 +50,6 @@ dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.6.0")
 }
 
-javafx {
-    modules("javafx.web")
-}
-
 detekt {
     failFast = true // fail build on any finding
     buildUponDefaultConfig = true // preconfigure defaults
