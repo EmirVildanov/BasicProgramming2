@@ -5,7 +5,18 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import tests.test2.Game
-import tornadofx.*
+import tornadofx.Fragment
+import tornadofx.seconds
+import tornadofx.hbox
+import tornadofx.paddingAll
+import tornadofx.button
+import tornadofx.px
+import tornadofx.style
+import tornadofx.em
+import tornadofx.box
+import tornadofx.c
+import tornadofx.action
+import tornadofx.runLater
 
 class Tile(private val index: Int, var number: Int) : Fragment() {
     val buttonText = SimpleStringProperty(" ")
@@ -13,6 +24,8 @@ class Tile(private val index: Int, var number: Int) : Fragment() {
     private val currentTile = this
     companion object Constants {
         const val PAD_ALL = 15
+        const val BUTTON_SIDE = 100
+        const val FONT_SIZE = 3
         val DELAY = 0.5.seconds
     }
 
@@ -20,10 +33,10 @@ class Tile(private val index: Int, var number: Int) : Fragment() {
         paddingAll = PAD_ALL
         button {
             style {
-                minWidth = 100.px
-                minHeight = 100.px
+                minWidth = BUTTON_SIDE.px
+                minHeight = BUTTON_SIDE.px
                 fontWeight = FontWeight.EXTRA_LIGHT
-                fontSize = 3.em
+                fontSize = FONT_SIZE.em
                 borderColor += box(
                     top = Color.GREY,
                     right = Color.GREY,
