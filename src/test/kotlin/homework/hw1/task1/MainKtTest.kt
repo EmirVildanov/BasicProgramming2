@@ -11,80 +11,48 @@ internal class MainKtTest {
         val array = mutableListOf(1, 2, 3, 4, 5)
         rearrangeArrayParts(array, array.size)
         println(array)
-        for (i in array.indices) {
-            assertEquals(intArrayOf(1, 2, 3, 4, 5)[i], array[i])
-        }
+        assertEquals(array, listOf(1, 2, 3, 4, 5))
     }
 
     @Test
-    fun shouldLeaveIntArrayInHisFirstView() {
+    fun shouldleaveIntArrayInHisFirstView() {
         val array = mutableListOf(1, 2, 3, 4, 5)
         rearrangeArrayParts(array, 0)
-        for (i in array.indices) {
-            assertEquals(intArrayOf(1, 2, 3, 4, 5)[i], array[i])
-        }
+        assertEquals(array, listOf(1, 2, 3, 4, 5))
     }
 
     @Test
-    fun shouldAlsoLeaveIntArrayInHisFirstView() {
+    fun shouldAlsoleaveIntArrayInHisFirstView() {
         val array = mutableListOf(1, 2, 3, 4, 5)
         rearrangeArrayParts(array, 0)
-        for (i in array.indices) {
-            assertEquals(intArrayOf(1, 2, 3, 4, 5)[i], array[i])
-        }
+        assertEquals(array, listOf(1, 2, 3, 4, 5))
     }
 
     @Test
     fun shouldRearrangeArrayParts() {
         val array = mutableListOf(1, 2, 3, 4, 5)
         rearrangeArrayParts(array, 3)
-        for (i in array.indices) {
-            assertEquals(intArrayOf(4, 5, 1, 2, 3)[i], array[i])
-        }
+        assertEquals(array, listOf(4, 5, 1, 2, 3))
     }
 
     @Test
     fun shouldRearrangePartsOfNegativeArray() {
         val array = mutableListOf(-1, -2, -3, -4, -5)
         rearrangeArrayParts(array, 2)
-        for (i in array.indices) {
-            assertEquals(intArrayOf(-3, -4, -5, -1, -2)[i], array[i])
-        }
+        assertEquals(array, listOf(-3, -4, -5, -1, -2))
     }
 
     @Test
     fun shouldRearrangeEasyArray() {
         val testArray = IntArray(6) { it + 1 }.toMutableList()
-        val assertingArray = IntArray(6)
-        assertingArray[0] = 4
-        assertingArray[1] = 5
-        assertingArray[2] = 6
-        assertingArray[3] = 1
-        assertingArray[4] = 2
-        assertingArray[5] = 3
         rearrangeArrayParts(testArray, 3)
-        for (i in testArray.indices) {
-            assertEquals(assertingArray[i], testArray[i])
-        }
+        assertEquals(testArray, listOf(4, 5, 6, 1, 2, 3))
     }
 
     @Test
     fun shouldRearrangeMediumSizeArray() {
         val testArray = IntArray(10) { it + 1 }.toMutableList()
-        val assertingArray = IntArray(10)
-        assertingArray[0] = 8
-        assertingArray[1] = 9
-        assertingArray[2] = 10
-        assertingArray[3] = 1
-        assertingArray[4] = 2
-        assertingArray[5] = 3
-        assertingArray[6] = 4
-        assertingArray[7] = 5
-        assertingArray[8] = 6
-        assertingArray[9] = 7
         rearrangeArrayParts(testArray, 7)
-        for (i in testArray.indices) {
-            assertEquals(assertingArray[i], testArray[i])
-        }
+        assertEquals(testArray, listOf(8, 9, 10, 1, 2, 3, 4, 5, 6, 7))
     }
 }
