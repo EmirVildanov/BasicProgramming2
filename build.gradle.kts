@@ -17,10 +17,10 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    implementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-    implementation("org.junit.jupiter:junit-jupiter-engine:5.6.0")
-    implementation("no.tornado:tornadofx:1.7.20")
+    api(kotlin("stdlib-jdk8"))
+    api("org.junit.jupiter:junit-jupiter-api:5.6.0")
+    api("org.junit.jupiter:junit-jupiter-engine:5.6.0")
+    api("no.tornado:tornadofx:1.7.20")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.6.0")
 }
 

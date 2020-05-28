@@ -8,7 +8,6 @@ import tornadofx.App
 
 fun main(args: Array<String>) {
     var inputCheck = false
-    val args = arrayOf("4")
     if (args.size == 1) {
         if (args[0].isInt() && args[0].toInt() % 2 == 0) {
             Game().main(args)
