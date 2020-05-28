@@ -54,7 +54,7 @@ class Tile(private val index: Int, var number: Int) : Fragment() {
         }
     }
 
-    fun disable() {
+    private fun disable() {
         isDisabledProperty.set(true)
         if (Game().checkWin()) {
             runLater(DELAY) {
