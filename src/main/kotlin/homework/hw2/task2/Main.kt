@@ -29,5 +29,7 @@ fun main() {
         deleteRepeatingElements(array)
         print("Your array after transformation is : ")
         array.forEach { print("$it ") }
+    } else {
+        println("Input array is empty")
     }
 }
