@@ -2,14 +2,10 @@ package tests.test2.views
 
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.scene.paint.Color
+import javafx.scene.text.FontWeight
 import tests.test2.Game
-import tornadofx.Fragment
-import tornadofx.hbox
-import tornadofx.button
-import tornadofx.paddingAll
-import tornadofx.runLater
-import tornadofx.action
-import tornadofx.seconds
+import tornadofx.*
 
 class Tile(private val index: Int, var number: Int) : Fragment() {
     val buttonText = SimpleStringProperty(" ")
@@ -23,6 +19,19 @@ class Tile(private val index: Int, var number: Int) : Fragment() {
     override val root = hbox {
         paddingAll = PAD_ALL
         button {
+            style {
+                minWidth = 100.px
+                minHeight = 100.px
+                fontWeight = FontWeight.EXTRA_LIGHT
+                fontSize = 3.em
+                borderColor += box(
+                    top = Color.GREY,
+                    right = Color.GREY,
+                    bottom = Color.GREY,
+                    left = Color.GREY
+                )
+                backgroundColor += c("white")
+            }
             paddingAll = PAD_ALL
             textProperty().bind(buttonText)
             disableProperty().bind(isDisabledProperty)
