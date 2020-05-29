@@ -7,7 +7,7 @@ internal class MainKtTest {
     fun shouldNotDoAnythingWithArray() {
         val array = arrayListOf(1, 2, 3, 4)
         deleteRepeatingElements(array)
-        assertEquals(array, arrayListOf(1, 2, 3, 4))
+        assertEquals(deleteRepeatingElements(array), arrayListOf(1, 2, 3, 4))
     }
 
     @Test
