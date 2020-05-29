@@ -3,8 +3,18 @@ package homework.hw1.task1
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalArgumentException
 
 internal class MainKtTest {
+
+    @Test
+    fun shouldCatchExceptionWhenFirstBoardIsGreaterThanArraySize() {
+        val array = mutableListOf(1, 2, 3, 4, 5)
+        assertThrows<IllegalArgumentException> {
+            rearrangeArrayParts(array, array.size + 1)
+        }
+    }
 
     @Test
     fun shouldDoNothingWithIntArray() {
@@ -15,7 +25,7 @@ internal class MainKtTest {
     }
 
     @Test
-    fun shouldleaveIntArrayInHisFirstView() {
+    fun shouldLeaveIntArrayInHisFirstView() {
         val array = mutableListOf(1, 2, 3, 4, 5)
         rearrangeArrayParts(array, 0)
         assertEquals(array, listOf(1, 2, 3, 4, 5))
