@@ -58,9 +58,6 @@ class AVLTree<K, V> : Map<K, V> where K : Comparable<K> {
         }
 
         private fun rotateRight(node: Node<K, V>): Node<K, V> {
-            if (node == null) {
-                return null
-            }
             //, side: KProperty<Pair<K, V>>
             val newNode = node.leftChild
             newNode?.parent = node.parent
