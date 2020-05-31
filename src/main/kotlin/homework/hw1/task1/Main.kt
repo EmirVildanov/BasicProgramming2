@@ -15,25 +15,28 @@ fun rearrangeArrayParts(array: MutableList<Int>, firstBoard: Int) {
 fun main() {
     print("Enter the first board : ")
     val firstBoard = readLine()?.toIntOrNull()
-    print("Enter the second board : ")
-    val secondBoard = readLine()?.toIntOrNull()
     if (firstBoard == null || firstBoard < 0) {
-        throw IllegalArgumentException("Wrong first board argument")
-    }
-    if (secondBoard == null || firstBoard < 0) {
-        throw IllegalArgumentException("Wrong second board argument")
-    }
-    val length = firstBoard + secondBoard
-    print("Enter $length elements of the list : ")
-    val array: MutableList<Int>? = readLine()?.split(' ')?.map { it.toInt() }?.toMutableList()
-    if (array == null || array.size != firstBoard + secondBoard) {
-        println("Null input array")
+        println("Wrong first board argument")
         return
     }
-    try {
-        rearrangeArrayParts(array, firstBoard)
-        print("The answer is : ${array.joinToString(" ")}")
-    } catch (exception: IllegalArgumentException) {
-        print("FirstBoard is greater than array size")
+    print("Enter the second board : ")
+    val secondBoard = readLine()?.toIntOrNull()
+    if (secondBoard == null || secondBoard < 0) {
+        println("Wrong second board argument")
+        return
+    }
+    print("Enter ${firstBoard + secondBoard} elements of the list : ")
+    val array: MutableList<Int>? = readLine()?.split(' ')?.map { it.toInt() }?.toMutableList()
+    if (array == null) {
+        println("Null input array")
+    } else if (array.size != firstBoard + secondBoard) {
+        println("Input array size doesn't equals input arguments")
+    } else {
+        try {
+            rearrangeArrayParts(array, firstBoard)
+            print("The answer is : ${array.joinToString(" ")}")
+        } catch (exception: IllegalArgumentException) {
+            print("FirstBoard is greater than array size")
+        }
     }
 }
