@@ -5,42 +5,43 @@ import org.junit.jupiter.api.Test
 internal class MainKtTest {
 
     @Test
-    fun shouldReturn0AsStringDoesNotContainsSubstring() {
-        assertEquals(0, cutOutLine("mamama", "buba"))
+    fun shouldReturn0ForEmptyString() {
+        val mainString = ""
+        assertEquals(0, cutOutLine(mainString))
     }
-
     @Test
-    fun shouldReturn0AsSubstringIsUpperCasedMainStringLetter() {
-        assertEquals(0, cutOutLine("B", "b"))
+    fun shouldReturn0AsMainStringDoesNotContainsForbiddenString() {
+        val mainString = "aaaaaaaaa"
+        assertEquals(0, cutOutLine(mainString))
     }
-
     @Test
-    fun shouldReturn1AsOnlyCentralCharHasToBeDeleted() {
-        assertEquals(1, cutOutLine("mmmmalllll", "mal"))
+    fun shouldReturn1AsMainStringIsAForbiddenString() {
+        val mainString = "xxx"
+        assertEquals(3, cutOutLine(mainString))
     }
-
     @Test
-    fun shouldReturn3As3CentralLettersOfForbiddenSubstringHaveToBeDeleted() {
-        assertEquals(3, cutOutLine("abuabuabu", "abu"))
+    fun shouldReturn2AsMainStringIsTwoForbiddenStringsWithASpace() {
+        val mainString = "xxx xxx"
+        assertEquals(6, cutOutLine(mainString))
     }
-
     @Test
-    fun shouldReturnStringLengthAsSubstringIsTheLetterStringConsistsOf() {
-        assertEquals(5, cutOutLine("aaaaa", "a"))
+    fun shouldReturn0AsMainStringIsOnlyTwoCrosses() {
+        val mainString = "xx"
+        assertEquals(0, cutOutLine(mainString))
     }
-
     @Test
-    fun shouldReturn4AsStringIsAMirroringOfSubstring() {
-        assertEquals(4, cutOutLine("aaaabbbb", "ab"))
+    fun shouldReturn1InAStringContainingAnotherSymbols() {
+        val mainString = "asdfsadfsdfhwtrnrxxxsadfsadf"
+        assertEquals(3, cutOutLine(mainString))
     }
-
     @Test
-    fun shouldReturn4AsStringIsAMirroringOfSubstringWith3ExtraLetters() {
-        assertEquals(4, cutOutLine("aaaabbbbbbb", "ab"))
+    fun shouldReturn2InAStringContainingAnotherSymbols() {
+        val mainString = "asdxxxfsadfsdfhwtrnrxxxsadfsadf"
+        assertEquals(6, cutOutLine(mainString))
     }
-
     @Test
-    fun shouldReturn2CheckingDeletingSubstringOfSpecialSymbols() {
-        assertEquals(2, cutOutLine("input :>> blabla \n output :>> blabla", ":>>"))
+    fun shouldReturn3InALongStringFullOfCrossesAndSpaces() {
+        val mainString = "x xxx xxxx xx xx xxxxx"
+        assertEquals(9, cutOutLine(mainString))
     }
 }
