@@ -1,14 +1,14 @@
 
-fun deleteRepeatingElements(array: MutableList<Int>): MutableList<Int> {
-    return array.reversed().toSet().reversed().toMutableList()
+fun <T> deleteRepeatingElements(list: List<T>): List<T> {
+    return list.reversed().distinct().reversed()
 }
 
 fun main() {
     print("Enter elements of the array : ")
-    val array = readLine()?.split(' ')?.map { it.toInt() }?.toMutableList()
-    if (array != null) {
+    val list = readLine()?.split(' ')?.map { it.toInt() }
+    if (list != null) {
         print("Your array after transformation is : ")
-        deleteRepeatingElements(array).forEach { print("$it ") }
+        println(deleteRepeatingElements(list).joinToString(" "))
     } else {
         println("Input array is null")
     }

@@ -4,7 +4,19 @@ import org.junit.jupiter.api.Test
 internal class MainKtTest {
 
     @Test
-    fun shouldNotDoAnythingWithArray() {
+    fun shouldNotDoAnythingWithStringList() {
+        val array = arrayListOf("ba", "ba", "bo", "ba")
+        deleteRepeatingElements(array)
+        assertEquals(deleteRepeatingElements(array), arrayListOf("bo", "ba"))
+    }
+    @Test
+    fun shouldNotDoAnythingWithStringListOfEqualElements() {
+        val array = arrayListOf("ba", "ba", "ba", "ba")
+        deleteRepeatingElements(array)
+        assertEquals(deleteRepeatingElements(array), arrayListOf("ba"))
+    }
+    @Test
+    fun shouldNotDoAnythingWithList() {
         val array = arrayListOf(1, 2, 3, 4)
         deleteRepeatingElements(array)
         assertEquals(deleteRepeatingElements(array), arrayListOf(1, 2, 3, 4))
