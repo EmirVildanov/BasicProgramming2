@@ -3,6 +3,7 @@ package homework.hw4.task2
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.util.regex.Pattern
 
 internal class TreeReaderTest {
 
@@ -10,13 +11,13 @@ internal class TreeReaderTest {
     fun test() {
         val file = File("src/test/kotlin/homework/hw4/task2/fileWithMediumTree")
         val string = "(* (+ (/ 12 12) 1) (/ (- 6 (- 12 9)) 3))"
-        val regex = Regex("[(].+[)]", DOT__MATCHES__ALL)
+        val regex = Regex("[(].+[)]", RegexOption.DOT_MATCHES_ALL)
         val value = regex.findAll(string)
         for (matchedText in value) {
             val answer = matchedText.value
-            print("")
         }
         println(value)
+//        assertEquals()
     }
     @Test
     fun shouldReadFileAndReturn4AsResult() {
@@ -27,7 +28,7 @@ internal class TreeReaderTest {
     @Test
     fun shouldCalculateResultOfTheLeftChildOfTheEasyTree() {
         val file = File("src/test/kotlin/homework/hw4/task2/fileWithEasyTree")
-        assertEquals(2, TreeReader(file).root.leftChild!!.calculateValue())
+        assertEquals(2, TreeReader(file).root.leftChild?.calculateValue())
     }
 
     @Test
