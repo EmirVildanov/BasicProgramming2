@@ -1,18 +1,18 @@
 package homework.hw4.task1
 
 import java.io.File
+import java.lang.IllegalArgumentException
 
-
-class Hashtable<K, V>{
+class Hashtable<K, V> {
 
     val entries = mutableSetOf<Bucket<K, V>?>()
     private val keys = mutableSetOf<K>()
     private val values = mutableSetOf<V>()
-    val size = 0
+    var size = 0
 
     private var loadFactor = 0.0
     private var hashFunction: (Int) -> Int = ::firstHashFunction
-    private var expansionNumber: Int = 0
+    var expansionNumber: Int = 0
 
     init {
         for (i in 0 until FIRST_BUCKETS_NUMBER) {
@@ -80,6 +80,7 @@ class Hashtable<K, V>{
             if (element?.hash == hash && element.key == key) {
                 val oldValue: V? = element.value
                 element.value = value
+                ++size
                 return oldValue
             }
         }
@@ -96,6 +97,7 @@ class Hashtable<K, V>{
             if (element?.key == null) {
                 val oldValue: V? = element?.value
                 element?.value = value
+                ++size
                 return oldValue
             }
         }
@@ -103,7 +105,7 @@ class Hashtable<K, V>{
         return null
     }
 
-    // THERE I SHOULD ADD REGEX TO CHECK READING DATA
+    // Works only for Hashtable<String, String>
     fun putFile(file: File) {
         val bufferedReader = file.bufferedReader()
         val elements = mutableSetOf<Bucket<K, V>.BucketElement>()
@@ -111,8 +113,13 @@ class Hashtable<K, V>{
             lines -> lines.forEach {
                 val currentLineElements = it.split(" ")
                 currentLineElements.forEach {
-                    if ()
-                    elements.add(it)
+                    val regex = "\\[(\\s+) (\\s+)\\]".toRegex()
+                    val key = regex.find(it)?.groupValues?.get(1)
+                    val value = regex.find(it)?.groupValues?.get(2)
+                    if (key == null || value == null) {
+                        throw IllegalArgumentException("Wrong data file")
+                    }
+                    this.put(key as K, value as V)
                 }
             }
         }

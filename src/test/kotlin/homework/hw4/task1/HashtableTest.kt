@@ -56,8 +56,16 @@ internal class HashtableTest {
         anotherHashtable.changeHashFunction(2)
         val firstArray = mutableListOf<Int>()
         val secondArray = mutableListOf<Int>()
-        hashtable.entries.forEach { firstArray.put(hashtable.hashFunction(it)) }
-        anotherHashtable.words.forEach { secondArray.put(anotherHashtable.hashFunction(it)) }
+        hashtable.entries.forEach { it ->
+            it?.elements?.forEach {
+                firstArray.add(it?.hash ?: 0)
+            }
+        }
+        anotherHashtable.entries.forEach { it ->
+            it?.elements?.forEach {
+                secondArray.add(it?.hash ?: 0)
+            }
+        }
         assertNotEquals(firstArray.toIntArray(), secondArray.toIntArray())
     }
 }
