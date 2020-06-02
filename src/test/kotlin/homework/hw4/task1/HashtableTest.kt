@@ -7,53 +7,57 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 internal class HashtableTest {
+
+    @Test
+    fun shouldTestEmptyWithoutDoingAnything() {
+        val hashtable = Hashtable<String, String>()
+        assertTrue(hashtable.isEmpty())
+    }
+    @Test
+    fun shouldTestRemovingFunction() {
+        val hashtable = Hashtable<String, String>()
+        hashtable.put("First", "Smth")
+        hashtable.remove("First")
+        assertTrue(hashtable.isEmpty())
+    }
     @Test
     fun shouldAddElementInHashtable() {
-        val hashtable = Hashtable()
-        hashtable.add("Ba")
-        assertTrue(hashtable.words.contains("Ba"))
+        val hashtable = Hashtable<Int, String>()
+        hashtable.put(1, "Smth")
+        assertTrue(hashtable.containsKey(1))
     }
     @Test
     fun shouldNotDoNothingReadingEmptyFile() {
-        val hashtable = Hashtable()
-        val anotherHashtable = Hashtable()
-        hashtable.addFromFile(File("src/test/kotlin/homework/hw4/task1/emptyTestFile"))
-        assertTrue(hashtable == anotherHashtable)
-    }
-    @Test
-    fun shouldRemoveElementFromHashtable() {
-        val hashtable = Hashtable()
-        val anotherHashtable = Hashtable()
-        anotherHashtable.add("Ba")
-        anotherHashtable.remove("Ba")
-        assertTrue(hashtable == anotherHashtable)
+        val hashtable = Hashtable<String, String>()
+        hashtable.putFile(File("src/test/kotlin/homework/hw4/task1/emptyTestFile"))
+        assertTrue(hashtable.isEmpty())
     }
     @Test
     fun shouldAddElementsFromFile() {
-        val hashtable = Hashtable()
-        val anotherHashtable = Hashtable()
-        anotherHashtable.addFromFile(File("src/test/kotlin/homework/hw4/task1/notEmptyTestFile"))
-        anotherHashtable.add("test")
-        anotherHashtable.add("file")
+        val hashtable = Hashtable<Int, String>()
+        val anotherHashtable = Hashtable<Int, String>()
+        anotherHashtable.putFile(File("src/test/kotlin/homework/hw4/task1/notEmptyTestFile"))
+        anotherHashtable.put(1, "test")
+        anotherHashtable.put(2, "file")
         assertTrue(hashtable == anotherHashtable)
     }
     @Test
     fun shouldAddFileThatWillMadeHashtableToExtend() {
-        val hashtable = Hashtable()
-        hashtable.addFromFile(File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
+        val hashtable = Hashtable<String, String>()
+        hashtable.putFile(File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
         assertEquals(2, hashtable.expansionNumber)
     }
     @Test
     fun shouldRedefineHashValuesAfterChangingHashFunction() {
-        val hashtable = Hashtable()
-        val anotherHashtable = Hashtable()
-        anotherHashtable.addFromFile(File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
-        hashtable.addFromFile(File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
+        val hashtable = Hashtable<String, String>()
+        val anotherHashtable = Hashtable<String, String>()
+        anotherHashtable.putFile(File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
+        hashtable.putFile(File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
         anotherHashtable.changeHashFunction(2)
         val firstArray = mutableListOf<Int>()
         val secondArray = mutableListOf<Int>()
-        hashtable.words.forEach { firstArray.add(hashtable.hashFunction(it)) }
-        anotherHashtable.words.forEach { secondArray.add(anotherHashtable.hashFunction(it)) }
+        hashtable.entries.forEach { firstArray.put(hashtable.hashFunction(it)) }
+        anotherHashtable.words.forEach { secondArray.put(anotherHashtable.hashFunction(it)) }
         assertNotEquals(firstArray.toIntArray(), secondArray.toIntArray())
     }
 }
