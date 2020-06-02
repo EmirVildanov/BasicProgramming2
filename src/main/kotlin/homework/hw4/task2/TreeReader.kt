@@ -5,7 +5,7 @@ import java.io.File
 import java.lang.IllegalArgumentException
 
 class TreeReader(file: File) {
-    var root: Node
+    lateinit var root: Node
     var value = 0
 
     class Node() {
@@ -77,15 +77,49 @@ class TreeReader(file: File) {
         return true
     }
 
+    //calls only if treeString contasins children
     fun splitUpTree(treeString: String): Node {
-//            val firstPart: String?
-//            val secondPart: String?
-//            val operation = treeString[1]
-//            operationValue = operation
-//            val bracesPattern = "[(].+[)]".toRegex()
-        val regex = "((?<!^..)\\([*-\\/\\+0-9 ()]+\\))\$" +
-                "|((?<=^..)\\([*-\\/\\+0-9 ()]+\\) )" +
-                "|\\d+" +
+//        var left: Node?
+//        var right: Node?
+//        val copyString = treeString.removePrefix("(").removeSuffix(")")
+//        val operation = copyString[0]
+//        var index = 2
+//        if (copyString[index].isDigit()) {
+//            while (index < copyString.length && copyString[index].isDigit()) {
+//                ++index
+//            }
+//            left = Node(copyString.substring(2, index).toInt())
+//            ++index
+//            if (copyString[index].isDigit()) {
+//                right = Node(copyString.substring(index, copyString.length).toInt())
+//            } else {
+//                right = splitUpTree(copyString.substring(index, copyString.length))
+//            }
+//            return Node(left, right, operation)
+//        } else {
+//            ++index
+//            val braces = arrayOf(1, 0)
+//            while (braces[0] != braces[1]) {
+//                if (copyString[index] == '(') {
+//                    ++braces[0]
+//                } else if (copyString[index] == ')') {
+//                    ++braces[1]
+//                }
+//                index++
+//            }
+//            left = splitUpTree(copyString.substring(2, index))
+//            ++index
+//            if (copyString[index].isDigit()) {
+//                right = Node(copyString.substring(index, copyString.length).toInt())
+//            } else {
+//                right = splitUpTree(copyString.substring(index, copyString.length))
+//            }
+//            return Node(left, right, operation)
+//        }
+
+        val regex = "(?<!^..)(\\([*-\\/\\+0-9 ()]+\\))(?=$)" +
+                "|((?<=^..)(\\([*-\\/\\+0-9 ()]+\\))(?= (\\d$" +
+                "|\\([+-\\/*])))|\\d+" +
                 "|^[+-\\/*]"
         val treePattern = Regex(regex)
         val listOfOperators = treePattern.findAll(
@@ -109,32 +143,18 @@ class TreeReader(file: File) {
         } else {
             return Node(listOfOperators[0].toInt())
         }
-//            firstPart = treePattern.find(treeString)?.groupValues?.get(1)
-//            secondPart = treePattern.find(treeString)?.groupValues?.get(2)
-//            if (firstPart != null) {
-//                leftChild = Node()
-//                if (isNumber(firstPart)) {
-//                    leftChild?.operandValue = firstPart.toInt()
-//                } else {
-//                    leftChild?.splitUpTree(firstPart)
-//                }
-//            }
-//            if (secondPart != null) {
-//                rightChild = Node()
-//                if (isNumber(secondPart)) {
-//                    rightChild?.operandValue = secondPart.toInt()
-//                } else {
-//                    rightChild?.splitUpTree(secondPart)
-//                }
-//            }
     }
 
     init {
         val bufferedReader: BufferedReader = file.bufferedReader()
         val inputString = bufferedReader.use { it.readText() }
         bufferedReader.close()
-        root = splitUpTree(inputString)
-        value = root.calculateValue()
+        if (isNumber(inputString)) {
+            root = Node(inputString.toInt())
+        } else {
+            root = splitUpTree(inputString)
+            value = root.calculateValue()
+        }
     }
 
     fun print() {
