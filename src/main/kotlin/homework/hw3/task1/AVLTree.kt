@@ -5,7 +5,7 @@ import java.lang.IllegalArgumentException
 class AVLTree<K, V> : Map<K, V> where K : Comparable<K> {
 
     var root: Node<K, V>? = null
-    override val entries: MutableSet<Map.Entry<K, V>> = mutableSetOf()
+    override val entries: MutableSet<Node<K, V>> = mutableSetOf()
     override val keys: MutableSet<K> = mutableSetOf()
     override val values: MutableSet<V> = mutableSetOf()
     override var size: Int = 0
@@ -25,7 +25,8 @@ class AVLTree<K, V> : Map<K, V> where K : Comparable<K> {
         fun delete(node: Node<K, V>, side: String) {
             when {
                 node.leftChild != null && node.rightChild != null -> {
-                    val newRoot = findNewRoot(node) ?: throw IllegalCallerException("Invalid situation: node has children")
+                    val newRoot = findNewRoot(node)
+                        ?: throw IllegalCallerException("Invalid situation: node has children")
                     deleteNode(newRoot.key)
                     node.key = newRoot.key
                     node.value = newRoot.value

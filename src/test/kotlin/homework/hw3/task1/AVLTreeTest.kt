@@ -100,19 +100,22 @@ internal class AVLTreeTest {
         testTree.put(2, "Me2")
         anotherTestTree.put(1, "Me")
         anotherTestTree.put(2, "Me2")
-        val testNode = testTree.entries.elementAt(0)
-        println(testNode.component2())
-
 //        println(testTree.entries)
 //        println(anotherTestTree.entries)
 //        println(testTree.entries.size)
 //        println(anotherTestTree.entries.size)
 //        println(testTree.entries == anotherTestTree.entries)
 //        println(testTree.entries.contains(anotherTestTree.entries.elementAt(0)))
+//        testTree.entries.addAll(anotherTestTree.entries)
+//        println(testTree.entries)
+//        println("\n")
+        println(testTree.entries)
+        println(anotherTestTree.entries)
+        println(testTree == anotherTestTree)
+        println(testTree.entries == anotherTestTree.entries)
         testTree.entries.addAll(anotherTestTree.entries)
         println(testTree.entries)
-        println("\n")
-        assertEquals(testTree, anotherTestTree)
+//        assertEquals(testTree, anotherTestTree)
     }
     @Test
     fun shouldTestRemovingNode() {
