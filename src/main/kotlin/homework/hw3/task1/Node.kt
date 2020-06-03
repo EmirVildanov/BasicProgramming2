@@ -5,8 +5,7 @@ import java.lang.Integer.max
 
 data class Node<K, V>(
     override var key: K,
-    override var value: V,
-    var parentTree: AVLTree<K, V>
+    override var value: V
 ) : Map.Entry<K, V> where K : Comparable<K> {
     private var height: Int = 1
     var leftChild: Node<K, V>? = null
@@ -20,15 +19,14 @@ data class Node<K, V>(
 
     fun findNodeByKey(key: K): Node<K, V>? {
         var currentPair: Node<K, V>? = this
-        loop@ while (true) {
+        while (true) {
             currentPair = when {
                 currentPair == null -> return null
-                key == currentPair.key -> break@loop
+                key == currentPair.key -> return currentPair
                 key < currentPair.key -> currentPair.leftChild
                 else -> currentPair.rightChild
             }
         }
-        return currentPair
     }
     private fun getBalanceFactor(): Int =
         (rightChild?.height ?: 0) - (leftChild?.height ?: 0)
@@ -37,7 +35,7 @@ data class Node<K, V>(
         height = max((rightChild?.height ?: 0), (leftChild?.height ?: 0)) + 1
     }
 
-    private fun rotateRight(): Node<K, V> {
+    private fun rotateRight(tree: AVLTree<K, V>): Node<K, V> {
         val newNode = leftChild ?: throw IllegalArgumentException("Nothing to rotate, null leftChild")
         newNode.parent = parent
         leftChild = newNode.rightChild
@@ -45,7 +43,7 @@ data class Node<K, V>(
             leftChild?.parent = this
         }
         when (this) {
-            parentTree.root -> parentTree.root = newNode
+            tree.root -> tree.root = newNode
             parent?.leftChild -> parent?.leftChild = newNode
             else -> parent?.rightChild = newNode
         }
@@ -56,15 +54,15 @@ data class Node<K, V>(
         return newNode
     }
 
-    private fun rotateLeft(): Node<K, V> {
-        val newNode = leftChild ?: throw IllegalArgumentException("Nothing to rotate, null rightChild")
+    private fun rotateLeft(tree: AVLTree<K, V>): Node<K, V> {
+        val newNode = rightChild ?: throw IllegalArgumentException("Nothing to rotate, null rightChild")
         newNode.parent = parent
         rightChild = newNode.leftChild
         if (rightChild != null) {
             rightChild?.parent = this
         }
         when (this) {
-            parentTree.root -> parentTree.root = newNode
+            tree.root -> tree.root = newNode
             parent?.leftChild -> parent?.leftChild = newNode
             else -> parent?.rightChild = newNode
         }
@@ -75,31 +73,32 @@ data class Node<K, V>(
         return newNode
     }
 
-    fun balance(): Node<K, V> {
+    fun balance(tree: AVLTree<K, V>): Node<K, V> {
         return when (this.getBalanceFactor()) {
             BALANCE_FACTOR_TWO -> {
                 if (rightChild?.getBalanceFactor() ?: 0 < 0) {
-                    rightChild = rightChild?.rotateRight()
+                    rightChild = rightChild?.rotateRight(tree)
                 }
-                this.rotateLeft()
+                this.rotateLeft(tree)
             }
             BALANCE_FACTOR_MINUS_TWO -> {
                 if (leftChild?.getBalanceFactor() ?: 0 > 0) {
-                    leftChild = leftChild?.rotateLeft()
+                    leftChild = leftChild?.rotateLeft(tree)
                 }
-                this.rotateRight()
+                this.rotateRight(tree)
             }
             else -> {
+                this.updateHeight()
                 this
             }
         }
     }
 
-    fun balanceParents() {
+    fun balanceParents(tree: AVLTree<K, V>) {
         var currentPair: Node<K, V>? = this
-        while (currentPair != parentTree.root) {
-            currentPair?.parent?.balance()
-            if (currentPair != parentTree.root) {
+        while (currentPair != tree.root) {
+            currentPair?.parent?.balance(tree)
+            if (currentPair != tree.root) {
                 currentPair = currentPair?.parent
             }
         }

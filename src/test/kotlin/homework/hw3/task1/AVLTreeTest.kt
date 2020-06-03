@@ -1,12 +1,25 @@
 package homework.hw3.task1
 
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class AVLTreeTest {
-
+    @Test
+    fun shouldTestRemovingValuesInCaseOfPuttingElementWithExistingKey() {
+        val testTree = AVLTree<Int, String>()
+        testTree.put(2, "Me")
+        testTree.put(2, "Not Me")
+        assertEquals(1, testTree.values.size)
+    }
+    @Test
+    fun shouldTestRemovingEntriesInCaseOfPuttingElementWithExistingKey() {
+        val testTree = AVLTree<Int, String>()
+        testTree.put(2, "Me")
+        testTree.put(2, "Not Me")
+        assertEquals(1, testTree.entries.size)
+    }
     @Test
     fun shouldTestFindingNodeByKey() {
         val testTree = AVLTree<Int, String>()
@@ -14,7 +27,7 @@ internal class AVLTreeTest {
         testTree.put(3, "Me")
         testTree.put(4, "Be")
         testTree.put(5, "Fe")
-        val testNode = Node(5, "Fe", testTree)
+        val testNode = Node(5, "Fe")
         assertEquals(testNode, testTree.root?.findNodeByKey(5))
     }
     @Test
@@ -24,7 +37,7 @@ internal class AVLTreeTest {
         anotherTestTree.put(2, "Me")
         anotherTestTree.put(3, "Me")
         testTree.put(1, "Me")
-        assertFalse(testTree == anotherTestTree)
+        assertNotEquals(testTree, anotherTestTree)
     }
     @Test
     fun shouldAssertFalseTreesWithDifferentKeys() {
@@ -32,7 +45,7 @@ internal class AVLTreeTest {
         val anotherTestTree = AVLTree<Int, String>()
         anotherTestTree.put(2, "Me")
         testTree.put(1, "Me")
-        assertFalse(testTree == anotherTestTree)
+        assertNotEquals(testTree, anotherTestTree)
     }
     @Test
     fun shouldAssertFalseTreesWithDifferentValues() {
@@ -40,7 +53,7 @@ internal class AVLTreeTest {
         val anotherTestTree = AVLTree<Int, String>()
         anotherTestTree.put(1, "Not Me")
         testTree.put(1, "Me")
-        assertFalse(testTree == anotherTestTree)
+        assertNotEquals(testTree, anotherTestTree)
     }
     @Test
     fun shouldDoNothingWithTreeAsTestingRemovingOfOneElement() {
@@ -48,7 +61,7 @@ internal class AVLTreeTest {
         val anotherTestTree = AVLTree<Int, String>()
         testTree.put(1, "Me")
         testTree.remove(1)
-        assertTrue(testTree == anotherTestTree)
+        assertEquals(testTree, anotherTestTree)
     }
     @Test
     fun shouldAddAllElementsFromTheList() {
@@ -68,7 +81,38 @@ internal class AVLTreeTest {
         anotherTestTree.put(1, "Be")
         anotherTestTree.put(1, "Me")
         testTree.put(1, "Me")
-        assertTrue(testTree == anotherTestTree)
+        testTree.entries.forEach {
+            print(it.key)
+            print(it.value)
+        }
+        print("\n")
+        anotherTestTree.entries.forEach {
+            print(it.key)
+            print(it.value)
+        }
+        assertEquals(testTree, anotherTestTree)
+    }
+    @Test
+    fun shouldTestAssertingTwoEqualTreesWithTwoElements() {
+        val testTree = AVLTree<Int, String>()
+        val anotherTestTree = AVLTree<Int, String>()
+        testTree.put(1, "Me")
+        testTree.put(2, "Me2")
+        anotherTestTree.put(1, "Me")
+        anotherTestTree.put(2, "Me2")
+        val testNode = testTree.entries.elementAt(0)
+        println(testNode.component2())
+
+//        println(testTree.entries)
+//        println(anotherTestTree.entries)
+//        println(testTree.entries.size)
+//        println(anotherTestTree.entries.size)
+//        println(testTree.entries == anotherTestTree.entries)
+//        println(testTree.entries.contains(anotherTestTree.entries.elementAt(0)))
+        testTree.entries.addAll(anotherTestTree.entries)
+        println(testTree.entries)
+        println("\n")
+        assertEquals(testTree, anotherTestTree)
     }
     @Test
     fun shouldTestRemovingNode() {
@@ -76,7 +120,7 @@ internal class AVLTreeTest {
         val anotherTestTree = AVLTree<Int, String>()
         testTree.put(1, "Me")
         testTree.remove(1)
-        assertTrue(testTree == anotherTestTree)
+        assertEquals(testTree, anotherTestTree)
     }
     @Test
     fun shouldClearTree() {
