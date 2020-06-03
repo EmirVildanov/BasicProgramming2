@@ -23,19 +23,24 @@ class Hashtable<K, V> {
     companion object {
         const val FIRST_BUCKETS_NUMBER = 16
         const val LOAD_FACTOR_MAXIMUM = 0.75
-        const val HASH_PRIME_NUMBER_FOR_FIRST_HASH_FUNCTION = 3
-        const val FIRST_HELP_VALUE_FOR_FIRST_HASH_FUNCTION = 63689
-        const val SECOND_HASH_HELP_VALUE_FOR_FIRST_HASH_FUNCTION = 378551
+        const val HASH_NUMBER1_FOR_FIRST_HASH_FUNCTION = 20
+        const val HASH_NUMBER2_FOR_FIRST_HASH_FUNCTION = 12
+        const val HASH_NUMBER3_FOR_FIRST_HASH_FUNCTION = 7
+        const val HASH_NUMBER4_FOR_FIRST_HASH_FUNCTION = 4
+        const val HASH_NUMBER1_FOR_SECOND_HASH_FUNCTION = 63689
+        const val HASH_NUMBER2_FOR_SECOND_HASH_FUNCTION = 378551
     }
 
     private fun firstHashFunction(hashCode: Int): Int {
-        val hash = hashCode xor (hashCode ushr 20 xor (hashCode ushr 12))
-        return hash xor (hash ushr 7) xor (hash ushr 4)
+        val hash = hashCode xor (hashCode ushr HASH_NUMBER1_FOR_FIRST_HASH_FUNCTION xor
+                (hashCode ushr HASH_NUMBER2_FOR_FIRST_HASH_FUNCTION))
+        return hash xor (hash ushr HASH_NUMBER3_FOR_FIRST_HASH_FUNCTION) xor
+                (hash ushr HASH_NUMBER4_FOR_FIRST_HASH_FUNCTION)
     }
 
     private fun secondHashFunction(hashCode: Int): Int {
-        val hash = hashCode * FIRST_HELP_VALUE_FOR_FIRST_HASH_FUNCTION + hashCode
-        return hash * SECOND_HASH_HELP_VALUE_FOR_FIRST_HASH_FUNCTION
+        val hash = hashCode * HASH_NUMBER1_FOR_SECOND_HASH_FUNCTION + hashCode
+        return hash * HASH_NUMBER2_FOR_SECOND_HASH_FUNCTION
     }
 
     fun changeHashFunction(functionNumber: Int) {
@@ -110,16 +115,16 @@ class Hashtable<K, V> {
         val bufferedReader = file.bufferedReader()
         val elements = mutableSetOf<Bucket<K, V>.BucketElement>()
         bufferedReader.useLines {
-            lines -> lines.forEach {
-                val currentLineElements = it.split(" ")
-                currentLineElements.forEach {
-                    val regex = "\\[(\\s+) (\\s+)\\]".toRegex()
-                    val key = regex.find(it)?.groupValues?.get(1)
-                    val value = regex.find(it)?.groupValues?.get(2)
-                    if (key == null || value == null) {
+            lines -> lines.forEach { line ->
+                val currentLineElements = line.split(" ")
+                currentLineElements.forEach { pair ->
+                    val regex = Regex("\\[(.+), (.+)]")
+                    if (!regex.containsMatchIn(pair)) {
                         throw IllegalArgumentException("Wrong data file")
                     }
-                    this.put(key as K, value as V)
+                    val key = regex.find(pair)?.groupValues?.get(1)
+                    val value = regex.find(pair)?.groupValues?.get(2)
+                    this.put(key, value)
                 }
             }
         }
