@@ -103,14 +103,4 @@ data class Node<K, V>(
             }
         }
     }
-    override fun equals(other: Any?): Boolean {
-        if (other !is Node<*, *>) {
-            return false
-        }
-        return this.key == other.key && this.value == other.value
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
 }

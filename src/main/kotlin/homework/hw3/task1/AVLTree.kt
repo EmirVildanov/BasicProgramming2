@@ -108,7 +108,7 @@ class AVLTree<K, V> : Map<K, V> where K : Comparable<K> {
             root = newPair
             insertCheck = true
         }
-        var currentPair = root ?: throw IllegalArgumentException("Null root")
+        var currentPair = root ?: return null
         var answerValue: V? = null
         while (!insertCheck) {
             when {
@@ -179,12 +179,6 @@ class AVLTree<K, V> : Map<K, V> where K : Comparable<K> {
         if (other !is AVLTree<*, *>) {
             throw IllegalArgumentException("Illegal argument for comparing")
         }
-//        var equalCheck = true
-//        for (i in 0 until size) {
-//            if (entries.elementAt(i) != other.entries.elementAt(i)) {
-//                equalCheck = false
-//            }
-//        }
         return entries == other.entries
     }
 

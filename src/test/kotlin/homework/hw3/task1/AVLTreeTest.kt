@@ -81,15 +81,6 @@ internal class AVLTreeTest {
         anotherTestTree.put(1, "Be")
         anotherTestTree.put(1, "Me")
         testTree.put(1, "Me")
-        testTree.entries.forEach {
-            print(it.key)
-            print(it.value)
-        }
-        print("\n")
-        anotherTestTree.entries.forEach {
-            print(it.key)
-            print(it.value)
-        }
         assertEquals(testTree, anotherTestTree)
     }
     @Test
@@ -97,25 +88,9 @@ internal class AVLTreeTest {
         val testTree = AVLTree<Int, String>()
         val anotherTestTree = AVLTree<Int, String>()
         testTree.put(1, "Me")
-        testTree.put(2, "Me2")
+        testTree.put(2, "Ba")
         anotherTestTree.put(1, "Me")
-        anotherTestTree.put(2, "Me2")
-//        println(testTree.entries)
-//        println(anotherTestTree.entries)
-//        println(testTree.entries.size)
-//        println(anotherTestTree.entries.size)
-//        println(testTree.entries == anotherTestTree.entries)
-//        println(testTree.entries.contains(anotherTestTree.entries.elementAt(0)))
-//        testTree.entries.addAll(anotherTestTree.entries)
-//        println(testTree.entries)
-//        println("\n")
-        println(testTree.entries)
-        println(anotherTestTree.entries)
-        println(testTree == anotherTestTree)
-        println(testTree.entries == anotherTestTree.entries)
-        testTree.entries.addAll(anotherTestTree.entries)
-        println(testTree.entries)
-//        assertEquals(testTree, anotherTestTree)
+        anotherTestTree.put(2, "Ba")
     }
     @Test
     fun shouldTestRemovingNode() {
