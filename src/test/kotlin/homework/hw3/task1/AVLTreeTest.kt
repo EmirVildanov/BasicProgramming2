@@ -91,6 +91,7 @@ internal class AVLTreeTest {
         testTree.put(2, "Ba")
         anotherTestTree.put(1, "Me")
         anotherTestTree.put(2, "Ba")
+        assertEquals(testTree, anotherTestTree)
     }
     @Test
     fun shouldTestRemovingNode() {
