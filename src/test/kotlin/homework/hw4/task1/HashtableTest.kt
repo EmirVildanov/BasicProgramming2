@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.io.FileReader
 
 internal class HashtableTest {
 
@@ -29,30 +30,30 @@ internal class HashtableTest {
     @Test
     fun shouldNotDoNothingReadingEmptyFile() {
         val hashtable = Hashtable<String, String>()
-        hashtable.putFile(File("src/test/kotlin/homework/hw4/task1/emptyTestFile"))
+        putFile(hashtable, File("src/test/kotlin/homework/hw4/task1/emptyTestFile"))
         assertTrue(hashtable.isEmpty())
     }
     @Test
     fun shouldAddElementsFromFile() {
-        val hashtable = Hashtable<Int, String>()
-        val anotherHashtable = Hashtable<Int, String>()
-        anotherHashtable.putFile(File("src/test/kotlin/homework/hw4/task1/notEmptyTestFile"))
-        anotherHashtable.put(1, "test")
-        anotherHashtable.put(2, "file")
+        val hashtable = Hashtable<String, String>()
+        val anotherHashtable = Hashtable<String, String>()
+        putFile(anotherHashtable, File("src/test/kotlin/homework/hw4/task1/notEmptyTestFile"))
+        anotherHashtable.put("1", "test")
+        anotherHashtable.put("2", "file")
         assertTrue(hashtable == anotherHashtable)
     }
     @Test
     fun shouldAddFileThatWillMadeHashtableToExtend() {
         val hashtable = Hashtable<String, String>()
-        hashtable.putFile(File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
+        putFile(hashtable, File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
         assertEquals(2, hashtable.expansionNumber)
     }
     @Test
     fun shouldRedefineHashValuesAfterChangingHashFunction() {
         val hashtable = Hashtable<String, String>()
         val anotherHashtable = Hashtable<String, String>()
-        anotherHashtable.putFile(File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
-        hashtable.putFile(File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
+        putFile(anotherHashtable, File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
+        putFile(hashtable, File("src/test/kotlin/homework/hw4/task1/testFileThatWillMakeHashtableToExtand"))
         anotherHashtable.changeHashFunction(2)
         val firstArray = mutableListOf<Int>()
         val secondArray = mutableListOf<Int>()

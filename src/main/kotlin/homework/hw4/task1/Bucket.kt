@@ -14,6 +14,7 @@ class Bucket<K, V> {
     fun addElement(key: K?, value: V?, hash: Int) {
         elements.add(BucketElement(key, value, hash))
         keys.add(key)
+        ++conflictsNumber
     }
     fun remove() {
         elements.clear()

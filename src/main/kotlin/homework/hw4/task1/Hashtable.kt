@@ -1,14 +1,12 @@
 package homework.hw4.task1
 
-import java.io.File
-import java.lang.IllegalArgumentException
-
 class Hashtable<K, V> {
 
     val entries = mutableSetOf<Bucket<K, V>?>()
     private val keys = mutableSetOf<K>()
     private val values = mutableSetOf<V>()
     var size = 0
+    var currentBucketsNumber = FIRST_BUCKETS_NUMBER
 
     private var loadFactor = 0.0
     private var hashFunction: (Int) -> Int = ::firstHashFunction
@@ -16,7 +14,7 @@ class Hashtable<K, V> {
 
     init {
         for (i in 0 until FIRST_BUCKETS_NUMBER) {
-            entries.add(null)
+            entries.add(Bucket())
         }
     }
 
@@ -55,8 +53,11 @@ class Hashtable<K, V> {
         val elements = mutableListOf<Bucket<K, V>?>()
         elements.addAll(entries)
         entries.clear()
-        elements.forEach {
-            it?.elements?.forEach {
+        for (i in 0 until currentBucketsNumber) {
+            entries.add(Bucket())
+        }
+        elements.forEach { element ->
+            element?.elements?.forEach {
                 put(it?.key, it?.value)
             }
         }
@@ -66,6 +67,7 @@ class Hashtable<K, V> {
         for (i in 0 until entries.size) {
             entries.add(Bucket())
         }
+        currentBucketsNumber = entries.size
         this.expansionNumber += 1
         refill()
     }
@@ -90,6 +92,7 @@ class Hashtable<K, V> {
             }
         }
         currentBucket?.addElement(key, value, hash)
+        ++size
         if (loadFactor >= LOAD_FACTOR_MAXIMUM) {
             resize()
         }
@@ -108,27 +111,6 @@ class Hashtable<K, V> {
         }
         entries.elementAt(0)?.addElement(null, value, 0)
         return null
-    }
-
-    // Works only for Hashtable<String, String>
-    fun putFile(file: File) {
-        val bufferedReader = file.bufferedReader()
-        val elements = mutableSetOf<Bucket<K, V>.BucketElement>()
-        bufferedReader.useLines {
-            lines -> lines.forEach { line ->
-                val currentLineElements = line.split(" ")
-                currentLineElements.forEach { pair ->
-                    val regex = Regex("\\[(.+), (.+)]")
-                    if (!regex.containsMatchIn(pair)) {
-                        throw IllegalArgumentException("Wrong data file")
-                    }
-                    val key = regex.find(pair)?.groupValues?.get(1)
-                    val value = regex.find(pair)?.groupValues?.get(2)
-                    this.put(key, value)
-                }
-            }
-        }
-        elements.forEach { this.put(it.key, it.value) }
     }
 
     fun remove(key: K) {
@@ -170,14 +152,7 @@ class Hashtable<K, V> {
         if (other !is Hashtable<*, *> || values.size != other.size) {
             return false
         }
-        var equalCheck = true
-        for (i in 0 until size) {
-            if (entries.elementAt(i) != other.entries.elementAt(i)) {
-                equalCheck = false
-                break
-            }
-        }
-        return equalCheck
+        return entries == other.entries
     }
 
     override fun hashCode(): Int {
@@ -196,8 +171,7 @@ class Hashtable<K, V> {
         println("The max number of searching attempts is : $maxConflictsNumber")
         print("Number of conflicts in each bucket: ")
         entries.forEach { print("${it?.conflictsNumber} ") }
-        println("")
-        println("The number of added words is : $size")
+        println("\nThe number of added words is : $size")
         println("The number of empty buckets is : ${entries.size - size}")
         println("Elements are: ")
         entries.forEach {
