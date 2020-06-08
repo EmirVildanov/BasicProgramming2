@@ -3,7 +3,7 @@ package homework.hw4.task1
 class Bucket<K, V> {
     var conflictsNumber = 0
     private val keys = mutableSetOf<K?>()
-    var elements = hashSetOf<BucketElement?>()
+    var elements = mutableSetOf<BucketElement?>()
 
     inner class BucketElement(
         var key: K?,
@@ -16,10 +16,18 @@ class Bucket<K, V> {
         keys.add(key)
         ++conflictsNumber
     }
-    fun remove() {
-        elements.clear()
-        keys.clear()
-        conflictsNumber = 0
+
+    fun remove(key: K?): V? {
+        var removingValue: V? = null
+        for (i in 0 until elements.size) {
+            if (elements.elementAt(i)?.key == key) {
+                removingValue = elements.elementAt(i)?.value
+                elements.remove(elements.elementAt(i))
+                break
+            }
+        }
+        keys.remove(key)
+        return removingValue
     }
 
     fun setNullConflictsNumber() {

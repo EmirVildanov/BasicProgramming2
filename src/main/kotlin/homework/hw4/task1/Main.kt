@@ -1,25 +1,6 @@
 package homework.hw4.task1
 
 import java.io.File
-import java.lang.IllegalArgumentException
-
-fun putFile(hashtable: Hashtable<String, String>, file: File) {
-    val bufferedReader = file.bufferedReader()
-    bufferedReader.useLines { lines ->
-        lines.forEach { line ->
-            val currentLineElements = line.split(" ")
-            currentLineElements.forEach { pair ->
-                val regex = Regex("\\[(.+),(.+)]")
-                if (!regex.containsMatchIn(pair)) {
-                    throw IllegalArgumentException("Wrong data file")
-                }
-                val key = regex.find(pair)?.groupValues?.get(1)
-                val value = regex.find(pair)?.groupValues?.get(2)
-                hashtable.put(key, value)
-            }
-        }
-    }
-}
 
 fun main() {
     val table = Hashtable<String, String>()
@@ -31,8 +12,17 @@ fun main() {
     table.put("key1", "first")
     table.put("key2", "second")
     table.printStatistics()
-    putFile(table, file)
+//    putFile(table, file)
     table.printStatistics()
+    /*
+    [my,file] [by,bo]
+[end,of]
+[file,yes]
+     */
+    table.put("my", "file")
+    table.put("by", "bo")
+    table.put("end", "of")
+    table.put("file", "yes")
     table.changeHashFunction(2)
     table.printStatistics()
     table.remove("my")
@@ -44,6 +34,8 @@ fun main() {
         table.put(i.toString(), testString)
         testString += "bla"
     }
+
+    print(hashtable())
 
     table.printStatistics()
 }

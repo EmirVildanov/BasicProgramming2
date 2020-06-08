@@ -36,6 +36,9 @@ class Hashtable<K, V> {
                 (hash ushr HASH_NUMBER4_FOR_FIRST_HASH_FUNCTION)
     }
 
+    fun get(input: String): Int {
+        return hashFunction(input.hashCode())
+    }
     private fun secondHashFunction(hashCode: Int): Int {
         val hash = hashCode * HASH_NUMBER1_FOR_SECOND_HASH_FUNCTION + hashCode
         return hash * HASH_NUMBER2_FOR_SECOND_HASH_FUNCTION
@@ -99,6 +102,7 @@ class Hashtable<K, V> {
         values.add(value)
         ++size
         if (loadFactor >= LOAD_FACTOR_MAXIMUM) {
+            loadFactor = 0.0
             resize()
         }
         loadFactor = size.toDouble() / entries.size.toDouble()
@@ -122,16 +126,12 @@ class Hashtable<K, V> {
         if (!keys.contains(key)) {
             return
         }
-        for (i in entries.indices) {
-            if (entries.elementAt(i)?.contains(key) == true) {
-                val hash = firstHashFunction(key.hashCode())
-                val position = indexFor(hash, entries.size)
-                val currentBucket = entries.elementAt(position)
-                entries.remove(currentBucket)
-                entries.elementAt(i)?.remove()
-                break
-            }
-        }
+
+        val hash = firstHashFunction(key.hashCode())
+        val position = indexFor(hash, entries.size)
+        val currentBucket = entries.elementAt(position)
+        keys.remove(key)
+        values.remove(currentBucket?.remove(key))
 //        entries.forEach {
 //            if (it?.contains(key) == true) {
 //                val hash = firstHashFunction(key.hashCode())
@@ -141,7 +141,6 @@ class Hashtable<K, V> {
 //                it.remove()
 //            }
 //        }
-        keys.remove(key)
         loadFactor = size.toDouble() / entries.size.toDouble()
     }
 
@@ -192,7 +191,7 @@ class Hashtable<K, V> {
         entries.forEach {
             it?.elements?.forEach {
                 if (it != null) {
-                    print("[${it.key} - ${it.value}]")
+                    println("[${it.key} - ${it.value}]")
                 }
             }
         }
