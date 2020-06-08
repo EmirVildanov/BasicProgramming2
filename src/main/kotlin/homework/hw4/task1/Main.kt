@@ -38,4 +38,12 @@ fun main() {
     table.remove("my")
     println(table.containsKey("my"))
     println(table.containsKey("file"))
+
+    var testString = "test"
+    for (i in 0 until 10) {
+        table.put(i.toString(), testString)
+        testString += "bla"
+    }
+
+    table.printStatistics()
 }

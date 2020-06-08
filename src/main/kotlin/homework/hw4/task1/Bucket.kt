@@ -22,6 +22,10 @@ class Bucket<K, V> {
         conflictsNumber = 0
     }
 
+    fun setNullConflictsNumber() {
+        this.conflictsNumber = 0
+    }
+
     fun contains(key: K?) = keys.contains(key)
 
     override fun equals(other: Any?): Boolean {

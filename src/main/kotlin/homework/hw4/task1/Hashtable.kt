@@ -3,8 +3,8 @@ package homework.hw4.task1
 class Hashtable<K, V> {
 
     val entries = mutableSetOf<Bucket<K, V>?>()
-    private val keys = mutableSetOf<K>()
-    private val values = mutableSetOf<V>()
+    private val keys = mutableSetOf<K?>()
+    private val values = mutableSetOf<V?>()
     var size = 0
     var currentBucketsNumber = FIRST_BUCKETS_NUMBER
 
@@ -52,7 +52,9 @@ class Hashtable<K, V> {
     private fun refill() {
         val elements = mutableListOf<Bucket<K, V>?>()
         elements.addAll(entries)
+        entries.forEach { it?.setNullConflictsNumber() }
         entries.clear()
+        size = 0
         for (i in 0 until currentBucketsNumber) {
             entries.add(Bucket())
         }
@@ -79,6 +81,7 @@ class Hashtable<K, V> {
     fun put(key: K?, value: V?): V? {
         if (key == null) {
             putForNullKey(value)
+            return null
         }
         val hash = firstHashFunction(key.hashCode())
         val position = indexFor(hash, entries.size)
@@ -92,6 +95,8 @@ class Hashtable<K, V> {
             }
         }
         currentBucket?.addElement(key, value, hash)
+        keys.add(key)
+        values.add(value)
         ++size
         if (loadFactor >= LOAD_FACTOR_MAXIMUM) {
             resize()
@@ -117,15 +122,25 @@ class Hashtable<K, V> {
         if (!keys.contains(key)) {
             return
         }
-        entries.forEach {
-            if (it?.contains(key) == true) {
+        for (i in entries.indices) {
+            if (entries.elementAt(i)?.contains(key) == true) {
                 val hash = firstHashFunction(key.hashCode())
                 val position = indexFor(hash, entries.size)
                 val currentBucket = entries.elementAt(position)
                 entries.remove(currentBucket)
-                it.remove()
+                entries.elementAt(i)?.remove()
+                break
             }
         }
+//        entries.forEach {
+//            if (it?.contains(key) == true) {
+//                val hash = firstHashFunction(key.hashCode())
+//                val position = indexFor(hash, entries.size)
+//                val currentBucket = entries.elementAt(position)
+//                entries.remove(currentBucket)
+//                it.remove()
+//            }
+//        }
         keys.remove(key)
         loadFactor = size.toDouble() / entries.size.toDouble()
     }
