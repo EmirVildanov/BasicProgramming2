@@ -338,7 +338,7 @@ class StartMenu : View() {
                 text = "Start game"
                 action {
                     close()
-                    PlayingField.onRefresh()
+//                    PlayingField.onRefresh()
                     PlayingField.openWindow()
                 }
             }
@@ -348,7 +348,7 @@ class StartMenu : View() {
 
 object PlayingField : View() {
     init {
-        onRefresh()
+//        onRefresh()
     }
 
     override fun onRefresh() {
@@ -378,26 +378,23 @@ object PlayingField : View() {
     }
 
     override val root = vbox {
-//        for (i in 0 until FIELD_SIDE) {
-//            hbox {
-//                for (j in 0 until FIELD_SIDE) {
-//                    val currentCell = Cell(i * FIELD_SIDE + j)
-//                    add(currentCell)
-//                    cellsArray.add(currentCell)
-//                }
-//            }
-//        }
-//        if (!playerTurn) { // при рестарте поле не появляется снова, а возвращается
-//            Bot.makeBotTurn()
-//            crossTurn = !crossTurn
-//            playerTurn = true
-//        }
+        for (i in 0 until FIELD_SIDE) {
+            hbox {
+                for (j in 0 until FIELD_SIDE) {
+                    val currentCell = Cell(i * FIELD_SIDE + j)
+                    add(currentCell)
+                    cellsArray.add(currentCell)
+                }
+            }
+        }
+        if (!playerTurn) { // при рестарте поле не появляется снова, а возвращается
+            Bot.makeBotTurn()
+            crossTurn = !crossTurn
+            playerTurn = true
+        }
     }
 
     fun restart() {
-//        if (crossTurn && !playerTurn) {
-//
-//        }
         gameIsOver = false
         cellsArray.forEach {
             it.activeStatus = true
