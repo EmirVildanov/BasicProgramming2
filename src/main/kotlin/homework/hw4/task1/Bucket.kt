@@ -1,18 +1,17 @@
 package homework.hw4.task1
 
-class Bucket<K, V> {
+data class Bucket<K, V>(var elements: MutableSet<Bucket<K, V>.BucketElement>) {
     var conflictsNumber = 0
     private val keys = mutableSetOf<K?>()
-    var elements = mutableSetOf<BucketElement?>()
 
     inner class BucketElement(
         var key: K?,
         var value: V?,
-        var hash: Int
+        var hashCode: Int
     )
 
-    fun addElement(key: K?, value: V?, hash: Int) {
-        elements.add(BucketElement(key, value, hash))
+    fun addElement(key: K?, value: V?, hashCode: Int) {
+        elements.add(BucketElement(key, value, hashCode))
         keys.add(key)
         ++conflictsNumber
     }
@@ -20,8 +19,8 @@ class Bucket<K, V> {
     fun remove(key: K?): V? {
         var removingValue: V? = null
         for (i in 0 until elements.size) {
-            if (elements.elementAt(i)?.key == key) {
-                removingValue = elements.elementAt(i)?.value
+            if (elements.elementAt(i).key == key) {
+                removingValue = elements.elementAt(i).value
                 elements.remove(elements.elementAt(i))
                 break
             }
