@@ -1,5 +1,8 @@
 package homework.hw4.task1
 
+import homework.hw4.task1.hashFunction.FirstHashFunction
+import homework.hw4.task1.hashFunction.HashFunction
+import homework.hw4.task1.hashFunction.SecondHashFunction
 import org.junit.jupiter.api.Test
 
 class Hashtable<K, V> {

@@ -1,4 +1,4 @@
-package homework.hw4.task1
+package homework.hw4.task1.hashFunction
 
 class FirstHashFunction : HashFunction {
     companion object {
