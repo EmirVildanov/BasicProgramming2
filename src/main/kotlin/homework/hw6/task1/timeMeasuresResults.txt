@@ -1,0 +1,19 @@
+1:
+Total time of usual quick sort is 986
+Total time of async quick sort is 1120
+
+2:
+Total time of usual quick sort is 1162
+Total time of async quick sort is 1216
+
+3:
+Total time of usual quick sort is 1167
+Total time of async quick sort is 1271
+
+4:
+Total time of usual quick sort is 1138
+Total time of async quick sort is 1241
+
+5:
+Total time of usual quick sort is 1206
+Total time of async quick sort is 1360
