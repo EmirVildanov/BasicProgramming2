@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import java.io.File
+import java.util.Scanner
 
-internal class MainKtTest {
+internal class TrieTest {
+    private val resourcesPath = "src/test/resources/homework.hw5.task1/"
     @Test
     fun shouldReturnSizeOfATrie() {
         val trie = Trie()
@@ -14,7 +16,7 @@ internal class MainKtTest {
         trie.add("ba")
         trie.add("basfgs")
         trie.remove("asdf")
-        assertEquals(7, trie.size())
+        assertEquals(2, trie.size)
     }
     @Test
     fun shouldCheckTrueAdding() {
@@ -61,8 +63,8 @@ internal class MainKtTest {
     @Test
     fun shouldDeserializeTrieFromFile() {
         val trie = Trie()
-        val file = File("src/test/kotlin/homework/hw5/task1/testRead")
-        trie.deserialize(file.inputStream())
+        val file = File(resourcesPath + "testRead")
+        trie.readObject(file.inputStream())
         val wordsArray = mutableListOf("m", "mi", "mas", "mias", "mos")
         for (i in 0 until wordsArray.size) {
             assertTrue(trie.contains(wordsArray[i]))
@@ -71,16 +73,29 @@ internal class MainKtTest {
     @Test
     fun shouldRewriteTrieWithWordsFromFile() {
         val trie = Trie()
-        val firstWordsArray = mutableListOf("aa", "asdf", "bgsd")
-        firstWordsArray.forEach { trie.add(it) }
-        val file = File("src/test/kotlin/homework/hw5/task1/testRead")
-        trie.deserialize(file.inputStream())
+        val previousWordsArray = mutableListOf("aa", "asdf", "bgsd")
+        previousWordsArray.forEach { trie.add(it) }
+        val file = File(resourcesPath + "testRead")
+        trie.readObject(file.inputStream())
         val wordsArray = mutableListOf("m", "mi", "mas", "mias", "mos")
         wordsArray.forEach {
             assertTrue(trie.contains(it))
         }
-        firstWordsArray.forEach {
+        previousWordsArray.forEach {
             assertFalse(trie.contains(it))
+        }
+    }
+    @Test
+    fun shouldAddWordsToFile() {
+        val trie = Trie()
+        val wordsArray = mutableListOf("aa", "asdf", "bgsd")
+        wordsArray.forEach { trie.add(it) }
+        val writeFile = File(resourcesPath + "testWrite")
+        trie.writeObject(writeFile.outputStream())
+        val scanner = Scanner(writeFile)
+        val fileWordsAfterSerializing = scanner.nextLine().split(" ")
+        for (i in fileWordsAfterSerializing.indices) {
+            assertEquals(wordsArray[i], fileWordsAfterSerializing[i])
         }
     }
 }

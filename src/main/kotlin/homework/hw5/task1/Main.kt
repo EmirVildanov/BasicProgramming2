@@ -3,27 +3,23 @@ package homework.hw5.task1
 import java.io.File
 import java.io.InputStream
 
-fun sum(a: Int, b: Int): Int {
-    return a + b
-}
-
 fun main() {
+    val resourcesPath = "src/main/resources/homework.hw5.task1/"
     val trie = Trie()
     trie.add("hi")
     trie.add("him")
     println(trie.contains("hi"))
     trie.remove("hi")
     println(trie.contains("hi"))
-    println(trie.size())
+    println(trie.size)
     println(trie.howManyStartWithPrefix("hi"))
-    val outputStream = File("src/homework.hw5.task1.main/kotlin/hwFifth/taskOne/testWrite").outputStream()
-    val inputStream: InputStream = File("src/homework.hw5.task1.main/kotlin/hwFifth/taskOne/testRead").inputStream()
-    trie.serialize(outputStream)
-    trie.deserialize(inputStream)
-
+    val outputStream = File(resourcesPath + "testWrite").outputStream()
+    val inputStream: InputStream = File(resourcesPath + "testRead").inputStream()
+    trie.readObject(inputStream)
+    trie.writeObject(outputStream)
     println(trie.contains("m"))
     println(trie.contains("mias"))
-
+    println(trie.howManyStartWithPrefix("m"))
     inputStream.close()
     outputStream.close()
 }
