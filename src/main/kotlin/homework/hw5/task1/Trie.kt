@@ -29,17 +29,6 @@ class Trie : Serializable {
         return true
     }
 
-    fun contains(element: String): Boolean {
-        if (element.isEmpty()) {
-            return root.isWordEnd
-        }
-        var currentNode: Vertex? = root
-        for (symbol in element) {
-            currentNode = currentNode?.children?.get(symbol)
-        }
-        return currentNode?.isWordEnd ?: false
-    }
-
     fun remove(element: String): Boolean {
         if (!contains(element)) {
             return false
@@ -70,6 +59,16 @@ class Trie : Serializable {
         return currentNode?.howManyStartWithPrefix ?: 0
     }
 
+    fun contains(element: String): Boolean {
+        if (element.isEmpty()) {
+            return root.isWordEnd
+        }
+        var currentNode: Vertex? = root
+        for (symbol in element) {
+            currentNode = currentNode?.children?.get(symbol)
+        }
+        return currentNode?.isWordEnd ?: false
+    }
     fun writeObject(output: OutputStream) {
         val words = root.getWords()
         if (root.isWordEnd) {
@@ -82,6 +81,7 @@ class Trie : Serializable {
     fun readObject(input: InputStream) {
         val inputString = input.bufferedReader().readLine() ?: ""
         val scanner = Scanner(inputString)
+        root.removeChildren()
         while (scanner.hasNext()) {
             val currentWords = scanner.nextLine().split(" ")
             currentWords.forEach {
