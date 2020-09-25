@@ -1,6 +1,8 @@
 package homework.hw4.task1
 
-data class Bucket<K, V>(var elements: MutableSet<Bucket<K, V>.BucketElement>) {
+data class Bucket<K, V>(
+    private var elements: MutableSet<Bucket<K, V>.BucketElement>
+) {
     var conflictsNumber = 0
     private val keys = mutableSetOf<K?>()
 
@@ -8,7 +10,23 @@ data class Bucket<K, V>(var elements: MutableSet<Bucket<K, V>.BucketElement>) {
         var key: K?,
         var value: V?,
         var hashCode: Int
-    )
+    ) {
+
+        override fun toString(): String {
+            return "$key $value $hashCode"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (other !is Bucket<*, *>.BucketElement) {
+                return false
+            }
+            return this.key == other.key && this.value == other.value
+        }
+
+        override fun hashCode(): Int {
+            return super.hashCode()
+        }
+    }
 
     fun addElement(key: K?, value: V?, hashCode: Int) {
         elements.add(BucketElement(key, value, hashCode))
@@ -34,6 +52,8 @@ data class Bucket<K, V>(var elements: MutableSet<Bucket<K, V>.BucketElement>) {
     }
 
     fun contains(key: K?) = keys.contains(key)
+
+    fun getElements() = elements
 
     override fun equals(other: Any?): Boolean {
         if (other !is Bucket<*, *> || elements.size != other.elements.size) {
