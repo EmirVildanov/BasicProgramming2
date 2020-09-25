@@ -25,8 +25,6 @@ dependencies {
     implementation("org.junit.jupiter:junit-jupiter-engine:5.6.0")
     implementation("io.ktor:ktor-server-netty:1.3.1")
     implementation("io.ktor:ktor-websockets:1.3.1")
-
-
     implementation("io.ktor:ktor-client-websockets:1.3.1")
     implementation("io.ktor:ktor-client-cio:1.3.1")
     implementation("io.ktor:ktor-client-js:1.3.1")

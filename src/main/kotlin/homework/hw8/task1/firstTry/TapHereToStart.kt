@@ -28,11 +28,11 @@ var firstUserTurn = true
 var secondUserReady = false
 var firstUserCrossSide = true
 
-enum class GameOverCheck(val checkType: Int) {
-    CROSS_WON(1),
-    CIRCLE_WON(2),
-    DRAW(3),
-    NOTHING(4)
+enum class GameOverCheck {
+    CROSS_WON,
+    CIRCLE_WON,
+    DRAW,
+    NOTHING
 }
 
 fun main() {
