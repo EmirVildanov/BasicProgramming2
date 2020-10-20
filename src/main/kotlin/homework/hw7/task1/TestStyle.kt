@@ -16,10 +16,11 @@ class TestStyle : Stylesheet() {
 
         val gameMenu by cssclass()
         val centerAlignment by cssclass()
-        val cellSelected by cssclass()
+        val fieldCell by cssclass()
+
+        const val CELL_SIZE = 150
 
         const val MENU__FONT_SIZE = 2.5
-        val SELECTED_COLOR = Color.RED
     }
 
     init {
@@ -39,8 +40,16 @@ class TestStyle : Stylesheet() {
             alignment = Pos.CENTER
         }
 
-        cellSelected {
-            fill = SELECTED_COLOR
+        fieldCell {
+            minHeight = CELL_SIZE.px
+            minWidth = CELL_SIZE.px
+            borderColor += box(
+                top = Color.GREY,
+                right = Color.GREY,
+                bottom = Color.GREY,
+                left = Color.GREY
+            )
+            backgroundColor += c("white")
         }
     }
 }

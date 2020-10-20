@@ -1,5 +1,8 @@
 package homework.hw7.task1
 
+import homework.hw7.task1.enums.BotDifficulty
+import homework.hw7.task1.enums.CellType
+import homework.hw7.task1.enums.GameOverCheck
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -20,9 +23,10 @@ object Bot {
 
     private fun randomTurn(sideTurn: Boolean = false, cornerTurn: Boolean = false) {
         val randomCellsArray = cellsArray.shuffled()
+        val isSpecialTurn = sideTurn || cornerTurn
         for (i in randomCellsArray.indices) {
             if (randomCellsArray[i].activeStatus) {
-                if (!sideTurn || !cornerTurn || isSideTurnAvailable(sideTurn, i) || isCornerTurnAvailable(cornerTurn, i)) {
+                if (!isSpecialTurn || isSideTurnAvailable(sideTurn, i) || isCornerTurnAvailable(cornerTurn, i)) {
                     putFigure(randomCellsArray[i])
                     break
                 }
@@ -39,29 +43,29 @@ object Bot {
     private fun distributeCells(permitted: MutableList<Int>, player: MutableList<Int>, bot: MutableList<Int>) {
         permitted.forEach {
             if (crossTurn) {
-                field[it] = Cell.InsideShape.CIRCLE
-                if (PlayingField.checkGameOver() == PlayingField.GameOverCheck.CIRCLE_WON) {
+                field[it] = CellType.CIRCLE
+                if (PlayingField.checkGameOver() == GameOverCheck.CIRCLE_WON) {
                     player.add(it)
                 }
-                field[it] = Cell.InsideShape.NOTHING
+                field[it] = CellType.NOTHING
 
-                field[it] = Cell.InsideShape.CROSS
-                if (PlayingField.checkGameOver() == PlayingField.GameOverCheck.CROSS_WON) {
+                field[it] = CellType.CROSS
+                if (PlayingField.checkGameOver() == GameOverCheck.CROSS_WON) {
                     bot.add(it)
                 }
-                field[it] = Cell.InsideShape.NOTHING
+                field[it] = CellType.NOTHING
             } else {
-                field[it] = Cell.InsideShape.CROSS
-                if (PlayingField.checkGameOver() == PlayingField.GameOverCheck.CROSS_WON) {
+                field[it] = CellType.CROSS
+                if (PlayingField.checkGameOver() == GameOverCheck.CROSS_WON) {
                     player.add(it)
                 }
-                field[it] = Cell.InsideShape.NOTHING
+                field[it] = CellType.NOTHING
 
-                field[it] = Cell.InsideShape.CIRCLE
-                if (PlayingField.checkGameOver() == PlayingField.GameOverCheck.CIRCLE_WON) {
+                field[it] = CellType.CIRCLE
+                if (PlayingField.checkGameOver() == GameOverCheck.CIRCLE_WON) {
                     bot.add(it)
                 }
-                field[it] = Cell.InsideShape.NOTHING
+                field[it] = CellType.NOTHING
             }
         }
     }
@@ -103,8 +107,6 @@ object Bot {
         for (x in 0 until FIELD_SIDE) {
             for (y in 0 until FIELD_SIDE) {
                 val distance = sqrt((x - lastPlayerX).toDouble().pow(2) + (y - lastPlayerY).toDouble().pow(2))
-//                val distance = (x * FIELD_SIDE + y) / FIELD_SIDE - lastPlayerX +
-//                        (x * FIELD_SIDE + y) % FIELD_SIDE - lastPlayerY
                 if (distance == maxDistance) {
                     appropriateCellsArray.add(cellsArray[(x * FIELD_SIDE + y)])
                 } else if (distance > maxDistance) {
@@ -123,7 +125,12 @@ object Bot {
     }
 
     private fun checkOppositeSecondPlayerTurn(): Boolean {
-        if (firstPlayerTurnCellIndex / 3 == 3 - secondPlayerTurnCellIndex / 3 && firstPlayerTurnCellIndex % 3 == 3 - secondPlayerTurnCellIndex % 3) {
+        val firstPlayerTurnRow = firstPlayerTurnCellIndex / FIELD_SIDE
+        val firstPlayerTurnColumn = firstPlayerTurnCellIndex % FIELD_SIDE
+        val secondPlayerTurnRow = secondPlayerTurnCellIndex / FIELD_SIDE
+        val secondPlayerTurnColumn = secondPlayerTurnCellIndex % FIELD_SIDE
+        if (firstPlayerTurnRow == FIELD_SIDE - secondPlayerTurnRow &&
+            firstPlayerTurnColumn == FIELD_SIDE - secondPlayerTurnColumn) {
             return true
         }
         return false
@@ -141,23 +148,18 @@ object Bot {
             putFigure(cellsArray[playerWonCellsArray[0]])
         } else {
             if (crossTurn) {
-                println("1")
-//                printField()
-                if (field[4] == Cell.InsideShape.NOTHING) {
+                if (field[4] == CellType.NOTHING) {
                     putFigure(cellsArray[4])
                 } else if (!putFigureOnTheMostRemoteCell()) {
                     randomTurn()
                 }
             } else {
-                println("2")
-//                printField()
-                if (field[4] == Cell.InsideShape.NOTHING) {
+                if (field[4] == CellType.NOTHING) {
                     putFigure(cellsArray[4])
-                } else if (field[4] == Cell.InsideShape.CIRCLE) {
+                } else if (field[4] == CellType.CIRCLE) {
                     println(firstPlayerTurnCellIndex)
                     println(secondPlayerTurnCellIndex)
                     if (firstPlayerTurnCellIndex == 0 || firstPlayerTurnCellIndex == 2 || firstPlayerTurnCellIndex == 6 || firstPlayerTurnCellIndex == 8) {
-//                        printField()
                         if (firstPlayerTurnCellIndex == 0) {
                             if (!putFigure(cellsArray[8])) {
                                 randomTurn(true)
@@ -206,13 +208,13 @@ object Bot {
                         }
                     }
                 } else {
-                    if (field[0] == Cell.InsideShape.NOTHING) {
+                    if (field[0] == CellType.NOTHING) {
                         putFigure(cellsArray[0])
-                    } else if (field[2] == Cell.InsideShape.NOTHING) {
+                    } else if (field[2] == CellType.NOTHING) {
                         putFigure(cellsArray[2])
-                    } else if (field[6] == Cell.InsideShape.NOTHING) {
+                    } else if (field[6] == CellType.NOTHING) {
                         putFigure(cellsArray[6])
-                    } else if (field[8] == Cell.InsideShape.NOTHING) {
+                    } else if (field[8] == CellType.NOTHING) {
                         putFigure(cellsArray[8])
                     } else {
                         randomTurn()
