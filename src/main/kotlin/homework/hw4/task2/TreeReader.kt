@@ -5,14 +5,14 @@ import java.io.File
 
 class TreeReader(file: File) {
     var root: Node
-    var value = 0
+    var value = 0.0
 
     init {
         val bufferedReader: BufferedReader = file.bufferedReader()
         val inputString = bufferedReader.use { it.readText() }
         bufferedReader.close()
         if (isNumber(inputString)) {
-            root = Node(inputString.toInt())
+            root = Operand(inputString.toInt())
         } else {
             root = splitUpTree(inputString)
             value = root.calculateValue()
@@ -29,20 +29,20 @@ class TreeReader(file: File) {
         ).toList().map { it.value }
         val leftChild: Node?
         val rightChild: Node?
-        if (isOperation(listOfOperators[0])) {
-            if (isNumber(listOfOperators[1])) {
-                leftChild = Node(listOfOperators[1].toInt())
+        return if (isOperation(listOfOperators[0])) {
+            leftChild = if (isNumber(listOfOperators[1])) {
+                Operand(listOfOperators[1].toInt())
             } else {
-                leftChild = splitUpTree(listOfOperators[1])
+                splitUpTree(listOfOperators[1])
             }
-            if (isNumber(listOfOperators[2])) {
-                rightChild = Node(listOfOperators[2].toInt())
+            rightChild = if (isNumber(listOfOperators[2])) {
+                Operand(listOfOperators[2].toInt())
             } else {
-                rightChild = splitUpTree(listOfOperators[2])
+                splitUpTree(listOfOperators[2])
             }
-            return Node(leftChild, rightChild, listOfOperators[0][0])
+            Operator(listOfOperators[0], leftChild, rightChild)
         } else {
-            return Node(listOfOperators[0].toInt())
+            Operand(listOfOperators[0].toInt())
         }
     }
 
