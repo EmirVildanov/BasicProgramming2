@@ -4,7 +4,6 @@ class FieldManager(
     private val idValuesField: List<Int>,
     private val linearSize: Int
 ) {
-
     private val cells = idValuesField.withIndex().map { Cell(it.index, it.value) }
 
     data class Cell(val index: Int, val playerId: Int)
