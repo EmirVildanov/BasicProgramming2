@@ -4,7 +4,12 @@ import homework.hw7.task1.GameApp.Companion.APP_WIDTH
 import javafx.geometry.Pos
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
-import tornadofx.*
+import tornadofx.Stylesheet
+import tornadofx.cssclass
+import tornadofx.em
+import tornadofx.px
+import tornadofx.c
+import tornadofx.box
 
 class MainStylesheet : Stylesheet() {
 
