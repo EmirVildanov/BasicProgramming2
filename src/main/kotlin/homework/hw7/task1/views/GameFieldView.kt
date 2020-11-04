@@ -5,7 +5,13 @@ import homework.hw7.task1.controllers.GameController
 import homework.hw7.task1.stylesheets.MainStylesheet
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
-import tornadofx.*
+import tornadofx.View
+import tornadofx.flowpane
+import tornadofx.button
+import tornadofx.addClass
+import tornadofx.action
+import tornadofx.onChange
+import tornadofx.alert
 
 class GameFieldView : View() {
     private val controller: GameController by inject()
@@ -30,7 +36,7 @@ class GameFieldView : View() {
             showEndGameMessage("It's a Draw")
         }
         controller.onVictory { player ->
-            showEndGameMessage("${controller.getPlayerFigure(player).toUpperCase()}'s win")
+            showEndGameMessage("${controller.getPlayerFigure(player).cellString.toUpperCase()}'s win")
         }
         controller.onError {
             showEndGameMessage(it)

@@ -3,13 +3,17 @@ package homework.hw7.task1.models
 import homework.hw7.task1.bot.Bot
 import homework.hw7.task1.bot.EasyBot
 import homework.hw7.task1.bot.HardBot
+import homework.hw7.task1.enums.BotDifficulty
 import javafx.beans.property.SimpleIntegerProperty
 
-class GameWithBotModel(playerId: Int, private val botId: Int, botType: String) : LocalGameModel() {
+class GameWithBotModel(
+    playerId: Int,
+    private val botId: Int,
+    botType: BotDifficulty
+) : GameModel() {
     private val bot: Bot = when (botType) {
-        "easy" -> EasyBot(field, playerId, botId)
-        "hard" -> HardBot(field, playerId, botId)
-        else -> EasyBot(field, playerId, botId)
+        BotDifficulty.EASY -> EasyBot(field, playerId, botId)
+        BotDifficulty.HARD -> HardBot(field, playerId, botId)
     }
 
     override fun onTurnStart(playerId: Int) {

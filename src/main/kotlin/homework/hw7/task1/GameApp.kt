@@ -13,11 +13,12 @@ class GameApp : App(MainMenuView::class, MainStylesheet::class) {
         const val FIELD_SIZE = CELLS_NUMBER * CELLS_NUMBER
         const val APP_HEIGHT = 400.0
         const val APP_WIDTH = (BUTTON_WIDTH * CELLS_NUMBER).toDouble()
+        const val LAMBDA_FOR_STUPID_CELLS_FIT_FIELD = 13.0
     }
 
     override fun start(stage: Stage) {
         super.start(stage)
-        stage.width = APP_WIDTH + 13.0
+        stage.width = APP_WIDTH + LAMBDA_FOR_STUPID_CELLS_FIT_FIELD
         stage.height = APP_HEIGHT
         stage.isResizable = false
     }

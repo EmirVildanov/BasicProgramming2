@@ -1,6 +1,9 @@
 package homework.hw7.task1.logic
 
-class FieldManager(private val idValuesField: List<Int>, private val linearSize: Int) {
+class FieldManager(
+    private val idValuesField: List<Int>,
+    private val linearSize: Int
+) {
 
     private val cells = idValuesField.withIndex().map { Cell(it.index, it.value) }
 

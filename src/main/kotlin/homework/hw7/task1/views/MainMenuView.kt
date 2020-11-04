@@ -1,10 +1,23 @@
 package homework.hw7.task1.views
 
 import homework.hw7.task1.controllers.GameController
+import homework.hw7.task1.enums.BotDifficulty
 import homework.hw7.task1.models.GameWithBotModel
 import homework.hw7.task1.stylesheets.MainStylesheet
 import javafx.scene.control.ToggleGroup
-import tornadofx.*
+import tornadofx.View
+import tornadofx.button
+import tornadofx.addClass
+import tornadofx.action
+import tornadofx.borderpane
+import tornadofx.vbox
+import tornadofx.label
+import tornadofx.radiobutton
+import tornadofx.hbox
+import tornadofx.Scope
+import tornadofx.find
+import tornadofx.top
+import tornadofx.bottom
 
 class MainMenuView : View() {
     private val playerGroup = ToggleGroup()
@@ -13,7 +26,7 @@ class MainMenuView : View() {
     private var selectedPlayerId = 0
     private val selectedBotId: Int
         get() = 1 - selectedPlayerId
-    private var selectedBotType = "easy"
+    private var selectedBotType = BotDifficulty.EASY
 
     override val root = borderpane {
         top {
@@ -35,12 +48,12 @@ class MainMenuView : View() {
                 radiobutton("Easy", botGroup) {
                     isSelected = true
                     action {
-                        selectedBotType = "easy"
+                        selectedBotType = BotDifficulty.EASY
                     }
                 }
                 radiobutton("Hard", botGroup) {
                     action {
-                        selectedBotType = "hard"
+                        selectedBotType = BotDifficulty.HARD
                     }
                 }
             }

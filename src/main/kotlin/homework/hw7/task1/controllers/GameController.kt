@@ -1,29 +1,30 @@
 package homework.hw7.task1.controllers
 
-import homework.hw7.task1.models.GameModel
+import homework.hw7.task1.enums.CellType
+import homework.hw7.task1.models.GameWithBotModel
 import javafx.beans.property.SimpleIntegerProperty
 import tornadofx.Controller
 import tornadofx.booleanBinding
 import tornadofx.stringBinding
 
-class GameController(private val gameModel: GameModel) : Controller() {
+class GameController(private val gameModel: GameWithBotModel) : Controller() {
     val buttonsData = gameModel.field.map { ButtonData(it) }
 
     inner class ButtonData(playerId: SimpleIntegerProperty) {
         val text = stringBinding(playerId) {
-            getPlayerFigure(value)
+            getPlayerFigure(value).cellString
         }
         val isDisabled = booleanBinding(playerId, gameModel.waitingProperty) {
             playerId.value != -1 || gameModel.waitingProperty.value == true
         }
     }
 
-    fun getPlayerFigure(playerId: Int): String {
+    fun getPlayerFigure(playerId: Int): CellType {
         return when (playerId) {
-            -1 -> ""
-            0 -> "x"
-            1 -> "o"
-            else -> ""
+            -1 -> CellType.NOTHING
+            0 -> CellType.CROSS
+            1 -> CellType.CIRCLE
+            else -> CellType.NOTHING
         }
     }
 
