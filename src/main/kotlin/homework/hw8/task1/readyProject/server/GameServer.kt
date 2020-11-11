@@ -1,7 +1,8 @@
-package homework.hw8.task1.data.server
+package homework.hw8.task1.readyProject.server
 
 import homework.hw7.task1.messages.TextMessage
 import homework.hw7.task1.messages.TurnClientMessage
+import homework.hw8.task1.readyProject.models.RemoteGameModel
 import io.ktor.application.install
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.close
@@ -9,6 +10,7 @@ import io.ktor.http.cio.websocket.readText
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.util.KtorExperimentalAPI
 import io.ktor.websocket.WebSocketServerSession
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
@@ -80,6 +82,7 @@ class GameServer {
         }
     }
 
+    @KtorExperimentalAPI
     private fun handleMessage(session: WebSocketServerSession, message: String) {
         println("Message received: $message")
         try {
@@ -94,9 +97,9 @@ class GameServer {
             println("Received message with illegal arguments: ${e.message}")
         } catch (e: PlayerNotInLobbyException) {
             println("Received turn message from player who is not in lobby")
-        } catch (e: GameLoop.PlayerCannotMakeTurnException) {
+        } catch (e: RemoteGameModel.PlayerCannotMakeTurnException) {
             println("Received turn message from the player who cannot make a turn")
-        } catch (e: GameLoop.IllegalTurnPositionException) {
+        } catch (e: RemoteGameModel.IllegalTurnPositionException) {
             println("Received turn message to an illegal position")
         }
     }

@@ -1,7 +1,8 @@
-package homework.hw8.task1.data.models
+package homework.hw8.task1.readyProject.models
 
 import homework.hw7.task1.GameApp.Companion.FIELD_SIZE
-import homework.hw8.task1.data.GameClient
+import homework.hw8.task1.readyProject.GameClient
+import io.ktor.util.KtorExperimentalAPI
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
@@ -9,23 +10,24 @@ import java.net.ConnectException
 import tornadofx.getValue
 import tornadofx.setValue
 
-class RemoteGameModel : GameLoop {
+@KtorExperimentalAPI
+class RemoteGameModel {
     private val client = GameClient()
 
     private var thisPlayerId: Int = -1
 
-    private val field = List(FIELD_SIZE) { SimpleIntegerProperty(-1) }
+    val field = List(FIELD_SIZE) { SimpleIntegerProperty(-1) }
 
-    private val activePlayerProperty = SimpleIntegerProperty(-1)
+    val activePlayerProperty = SimpleIntegerProperty(-1)
     var activePlayer by activePlayerProperty
 
-    private val winnerProperty = SimpleIntegerProperty(-1)
+    val winnerProperty = SimpleIntegerProperty(-1)
     var winner by winnerProperty
 
-    private val gameOverProperty = SimpleBooleanProperty(false)
+    val gameOverProperty = SimpleBooleanProperty(false)
     var gameOver by gameOverProperty
 
-    private val waitingProperty = SimpleBooleanProperty(true)
+    val waitingProperty = SimpleBooleanProperty(true)
     var waiting by waitingProperty
 
     val errorMessageProperty = SimpleStringProperty(null)
@@ -54,7 +56,7 @@ class RemoteGameModel : GameLoop {
             onVictory(it)
         }
         client.onTie = {
-            onDraw()
+            onTie()
         }
         client.onConnectionError = {
             onError(ConnectionLostException())
@@ -76,7 +78,7 @@ class RemoteGameModel : GameLoop {
         client.close()
     }
 
-    override fun onGameStart() {
+    fun onGameStart() {
         if (gameStarted) {
             return
         }
@@ -88,33 +90,37 @@ class RemoteGameModel : GameLoop {
         makeTurn(activePlayer, position)
     }
 
-    override fun onTurnStart(playerId: Int) {
+    fun onTurnStart(playerId: Int) {
         activePlayer = playerId
         waiting = activePlayer != thisPlayerId
     }
 
-    override fun onTurnMade(playerId: Int, position: Int) {
+    fun onTurnMade(playerId: Int, position: Int) {
         field[position].set(playerId)
         waiting = true
         onTurnStart(1 - playerId)
     }
 
-    override fun onVictory(playerId: Int) {
+    fun onVictory(playerId: Int) {
         winner = playerId
         gameOver = true
     }
 
-    override fun onDraw() {
+    fun onTie() {
         winner = -1
         gameOver = true
     }
 
-    override fun onError(exception: Exception) {
+    fun onError(exception: Exception) {
         errorMessage = "Error connecting"
     }
 
-    override fun makeTurn(playerId: Int, position: Int) {
+    fun makeTurn(playerId: Int, position: Int) {
         client.makeTurn(position)
         onTurnMade(playerId, position)
     }
+
+    class IllegalTurnPositionException(message: String) : IllegalArgumentException(message)
+
+    class PlayerCannotMakeTurnException(message: String) : IllegalArgumentException(message)
 }

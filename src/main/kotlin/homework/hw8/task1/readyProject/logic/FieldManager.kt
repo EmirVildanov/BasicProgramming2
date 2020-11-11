@@ -1,4 +1,4 @@
-package homework.hw7.task1.logic
+package homework.hw8.task1.readyProject.logic
 
 class FieldManager(private val idValuesField: List<Int>, private val linearSize: Int) {
 

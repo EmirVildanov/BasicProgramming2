@@ -1,8 +1,12 @@
-package homework.hw8.task1.data
+package homework.hw8.task1.readyProject
 
-import homework.hw7.task1.messages.*
-import homework.hw8.task1.data.server.GameServer.Companion.HOST
-import homework.hw8.task1.data.server.GameServer.Companion.PORT
+import homework.hw7.task1.messages.GameStartedMessage
+import homework.hw7.task1.messages.GameEndedMessage
+import homework.hw7.task1.messages.TextMessage
+import homework.hw7.task1.messages.TurnServerMessage
+import homework.hw7.task1.messages.TurnClientMessage
+import homework.hw8.task1.readyProject.server.GameServer.Companion.HOST
+import homework.hw8.task1.readyProject.server.GameServer.Companion.PORT
 import io.ktor.client.HttpClient
 import io.ktor.client.features.websocket.WebSockets
 import io.ktor.client.features.websocket.ws
@@ -11,6 +15,7 @@ import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.WebSocketSession
 import io.ktor.http.cio.websocket.close
 import io.ktor.http.cio.websocket.readText
+import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -18,6 +23,7 @@ import tornadofx.runLater
 import java.net.ConnectException
 
 class GameClient {
+    @KtorExperimentalAPI
     private val client: HttpClient = HttpClient {
         install(WebSockets)
     }
@@ -47,6 +53,7 @@ class GameClient {
         }
     }
 
+    @KtorExperimentalAPI
     private suspend fun connect() {
         client.ws(
             method = HttpMethod.Get,

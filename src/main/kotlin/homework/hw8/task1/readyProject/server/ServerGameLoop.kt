@@ -1,10 +1,12 @@
-package homework.hw8.task1.data.server
+package homework.hw8.task1.readyProject.server
 
 import homework.hw7.task1.GameApp
-import homework.hw7.task1.logic.FieldManager
+import homework.hw8.task1.readyProject.logic.FieldManager
 import homework.hw7.task1.messages.GameEndedMessage
 import homework.hw7.task1.messages.GameStartedMessage
 import homework.hw7.task1.messages.TurnServerMessage
+import java.lang.Exception
+import java.lang.IllegalArgumentException
 
 class ServerGameLoop(private val playersManager: GameServer.PlayersManager) {
     private val field = MutableList(GameApp.FIELD_SIZE) { -1 }
@@ -12,6 +14,20 @@ class ServerGameLoop(private val playersManager: GameServer.PlayersManager) {
     private var gameEnded = false
     private var winner = -1
     var gameOn = false
+
+    fun makeTurn(playerId: Int, position: Int) {
+        if (activePlayer != playerId) {
+            throw PlayerCannotMakeTurn()
+        }
+        if (field[position] != -1) {
+            throw IllegalTurnPosition()
+        }
+        onTurnMade(playerId, position)
+        checkIfGameEnded()
+        if (!gameEnded) {
+            onTurnStart(getNextPlayer())
+        }
+    }
 
     fun onGameStart() {
         println("Game started")
@@ -23,7 +39,7 @@ class ServerGameLoop(private val playersManager: GameServer.PlayersManager) {
         playersManager.notifyEach { GameStartedMessage.compose(it) }
     }
 
-    private fun onTurnStart(playerId: Int) {
+    fun onTurnStart(playerId: Int) {
         println("Turn for player #$playerId starts")
         activePlayer = playerId
     }
@@ -39,7 +55,7 @@ class ServerGameLoop(private val playersManager: GameServer.PlayersManager) {
         onVictory(1 - playerId)
     }
 
-    private fun onVictory(playerId: Int) {
+    fun onVictory(playerId: Int) {
         println("Player #$playerId won")
         winner = playerId
         gameEnded = true
@@ -48,14 +64,19 @@ class ServerGameLoop(private val playersManager: GameServer.PlayersManager) {
         playersManager.kickAll()
     }
 
-    private fun onDraw() {
-        println("Draw!")
+    fun onTie() {
+        println("Tie!")
         winner = -1
         gameEnded = true
         gameOn = false
         playersManager.notifyAll(GameEndedMessage.compose(-1))
         playersManager.kickAll()
     }
+
+    fun onError(exception: Exception) {
+        println("Error occurred in the LocalGameLoop $exception")
+    }
+
     private fun checkIfGameEnded() {
         val fieldManager = FieldManager(field, GameApp.CELLS_NUMBER)
         val victoriousPlayer = fieldManager.getWinner()
@@ -63,7 +84,7 @@ class ServerGameLoop(private val playersManager: GameServer.PlayersManager) {
             onVictory(victoriousPlayer)
         } else {
             if (field.none { it == -1 }) {
-                onDraw()
+                onTie()
             }
         }
     }
@@ -72,21 +93,7 @@ class ServerGameLoop(private val playersManager: GameServer.PlayersManager) {
         return 1 - activePlayer
     }
 
-    fun onError(exception: Exception) {
-        println("Error occurred in the LocalGameLoop $exception")
-    }
+    class IllegalTurnPosition : IllegalArgumentException()
 
-    fun makeTurn(playerId: Int, position: Int) {
-        if (activePlayer != playerId) {
-            throw GameLoop.PlayerCannotMakeTurnException("layerCannotMakeTurn")
-        }
-        if (field[position] != -1) {
-            throw GameLoop.IllegalTurnPositionException("IllegalTurnPosition")
-        }
-        onTurnMade(playerId, position)
-        checkIfGameEnded()
-        if (!gameEnded) {
-            onTurnStart(getNextPlayer())
-        }
-    }
+    class PlayerCannotMakeTurn : IllegalArgumentException()
 }
