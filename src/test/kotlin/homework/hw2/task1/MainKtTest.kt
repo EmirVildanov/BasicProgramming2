@@ -1,4 +1,5 @@
-import homework.hw2.task1.cutOutLine
+package homework.hw2.task1
+
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
