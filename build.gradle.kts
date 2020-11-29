@@ -34,7 +34,10 @@ dependencies {
 
     implementation("com.sun.xml.ws:servlet:3.0.0-M1")
     implementation("org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0")
-//    implementation("javax.servlet:javax.servlet-api:4.0.1")
+    implementation("org.openjfx:javafx-base:11.0.2")
+    implementation("org.openjfx:javafx:11.0.2")
+    implementation("org.openjfx:javafx-controls:11.0.2")
+    implementation("org.openjfx:javafx-maven-plugin:0.0.4")
 
     implementation("io.ktor:ktor-client-apache:1.3.1")
 
@@ -46,6 +49,10 @@ dependencies {
 
     implementation("no.tornado:tornadofx:1.7.20")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.6.0")
+}
+
+javafx {
+    modules("javafx.controls", "javafx.fxml")
 }
 
 detekt {

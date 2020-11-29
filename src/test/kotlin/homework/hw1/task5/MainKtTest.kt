@@ -1,6 +1,5 @@
 package homework.hw1.task5
 
-import countNonEmptyLines
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.File

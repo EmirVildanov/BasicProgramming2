@@ -48,7 +48,7 @@ class GameFieldView : View() {
     }
 
     private fun showEndGameMessage(text: String) {
-        alert(Alert.AlertType.INFORMATION, text, "Return to the main menu", ButtonType.OK, actionFn = {
+        alert(Alert.AlertType.INFORMATION, text, "Return to the homework.hw1.task4.homework.hw1.task5.main menu", ButtonType.OK, actionFn = {
             replaceWith<MainMenuView>()
         })
         replaceWith<MainMenuView>()
