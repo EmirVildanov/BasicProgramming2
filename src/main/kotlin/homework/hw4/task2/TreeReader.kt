@@ -27,22 +27,23 @@ class TreeReader(file: File) {
         val listOfOperators = treePattern.findAll(
             treeString.removePrefix("(").removeSuffix(")")
         ).toList().map { it.value }
-        val leftChild: Node?
-        val rightChild: Node?
-        return if (isOperation(listOfOperators[0])) {
-            leftChild = if (isNumber(listOfOperators[1])) {
-                Operand(listOfOperators[1].toInt())
-            } else {
-                splitUpTree(listOfOperators[1])
-            }
-            rightChild = if (isNumber(listOfOperators[2])) {
-                Operand(listOfOperators[2].toInt())
-            } else {
-                splitUpTree(listOfOperators[2])
-            }
-            Operator(listOfOperators[0], leftChild, rightChild)
+        val firstOperator = listOfOperators[0]
+        val secondOperator = listOfOperators[1]
+        val thirdOperator = listOfOperators[2]
+        return if (isNumber(firstOperator)) {
+            Operand(firstOperator.toInt())
         } else {
-            Operand(listOfOperators[0].toInt())
+            val leftChild = if (isNumber(secondOperator)) {
+                Operand(secondOperator.toInt())
+            } else {
+                splitUpTree(secondOperator)
+            }
+            val rightChild = if (isNumber(thirdOperator)) {
+                Operand(thirdOperator.toInt())
+            } else {
+                splitUpTree(thirdOperator)
+            }
+            Operator(firstOperator, leftChild, rightChild)
         }
     }
 
@@ -53,16 +54,6 @@ class TreeReader(file: File) {
             }
         }
         return true
-    }
-
-    private fun isOperation(char: String): Boolean {
-        return when (char) {
-            "+" -> true
-            "-" -> true
-            "/" -> true
-            "*" -> true
-            else -> false
-        }
     }
 
     fun print() {
