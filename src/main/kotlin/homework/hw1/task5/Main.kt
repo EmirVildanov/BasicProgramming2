@@ -1,3 +1,5 @@
+package homework.hw1.task5
+
 import java.io.File
 
 fun countNonEmptyLines(file: File): Int {
@@ -5,7 +7,7 @@ fun countNonEmptyLines(file: File): Int {
 }
 
 fun main() {
-    val file = File("src/main/kotlin//homework/hw1/task5/test.txt")
+    val file = File("src/main/kotlin/homework/hw1/task5/test.txt")
     if (!file.exists()) {
         print("\nFile not found\n")
         return

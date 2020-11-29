@@ -1,3 +1,5 @@
+package homework.hw1.task4
+
 import java.util.Scanner
 
 fun checkIfPalindrome(input: String): Boolean {
