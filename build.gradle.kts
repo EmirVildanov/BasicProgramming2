@@ -25,6 +25,7 @@ dependencies {
     implementation("org.openjfx:javafx-controls:11.0.2")
     implementation("org.openjfx:javafx-maven-plugin:0.0.4")
     implementation("no.tornado:tornadofx:1.7.20")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.6.0")
 }
 
