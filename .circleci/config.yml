@@ -10,3 +10,6 @@ jobs:
       - run:
           name: Run Detekt
           command: ./gradlew detekt
+      - run:
+          name: Run Unit tests
+          command: ./gradlew test
