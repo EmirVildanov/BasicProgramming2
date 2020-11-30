@@ -1,3 +1,4 @@
+package homework.hw2.task2
 
 fun <T> deleteRepeatingElements(list: List<T>): List<T> {
     return list.reversed().distinct().reversed()
