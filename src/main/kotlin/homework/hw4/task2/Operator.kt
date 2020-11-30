@@ -18,11 +18,6 @@ class Operator(
     }
 
     override fun toString(): String {
-        var stringTree = "("
-        stringTree += "$operandString "
-        stringTree += "$leftChild "
-        stringTree += "$rightChild "
-        stringTree += ")"
-        return stringTree
+        return "($operandString $leftChild $rightChild)"
     }
 }
