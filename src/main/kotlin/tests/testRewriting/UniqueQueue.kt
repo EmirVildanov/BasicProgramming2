@@ -42,7 +42,7 @@ class UniqueQueue<T>(override val size: Int) : Queue<T> {
         if (isEmpty()) {
             throw IllegalStateException("The queue is empty")
         }
-        val removingElement = elements.last()
+        val removingElement = elements.first()
         elements.remove(removingElement)
         return removingElement
     }
@@ -83,7 +83,7 @@ class UniqueQueue<T>(override val size: Int) : Queue<T> {
         if (isEmpty()) {
             return null
         }
-        val removingElement = elements.last()
+        val removingElement = elements.first()
         elements.remove(removingElement)
         return removingElement
     }
@@ -92,13 +92,13 @@ class UniqueQueue<T>(override val size: Int) : Queue<T> {
         if (isEmpty()) {
             throw IllegalStateException("The queue is empty")
         }
-        return elements.last()
+        return elements.first()
     }
 
     override fun peek(): T? {
         if (isEmpty()) {
             return null
         }
-        return elements.last()
+        return elements.first()
     }
 }

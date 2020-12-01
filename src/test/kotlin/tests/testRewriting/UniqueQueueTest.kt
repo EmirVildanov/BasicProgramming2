@@ -97,10 +97,10 @@ internal class UniqueQueueTest {
         uniqueQueue.add(2)
         uniqueQueue.add(10)
         uniqueQueue.add(120)
-        assertEquals(120, uniqueQueue.remove())
-        assertEquals(10, uniqueQueue.remove())
-        assertEquals(2, uniqueQueue.remove())
         assertEquals(3, uniqueQueue.remove())
+        assertEquals(2, uniqueQueue.remove())
+        assertEquals(10, uniqueQueue.remove())
+        assertEquals(120, uniqueQueue.remove())
         assertEquals(null, uniqueQueue.poll())
     }
 
