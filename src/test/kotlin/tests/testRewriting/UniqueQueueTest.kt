@@ -41,8 +41,6 @@ internal class UniqueQueueTest {
     fun shouldAddAllStringElementsToTheQueue() {
         val uniqueQueue = UniqueQueue<String>(5)
         val testStringArray = arrayListOf("1", "2", "3")
-        println(testStringArray.size)
-        println(uniqueQueue.size)
         uniqueQueue.addAll(testStringArray)
         assertTrue(uniqueQueue.containsAll(arrayListOf("2", "3", "1")))
     }
