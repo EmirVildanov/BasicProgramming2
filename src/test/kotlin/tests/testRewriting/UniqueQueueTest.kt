@@ -105,6 +105,24 @@ internal class UniqueQueueTest {
     }
 
     @Test
+    fun shouldCheckThatQueueStructureWorksWithAddingNewElementsAfterRemovingSomeOfPrevious() {
+        val uniqueQueue = UniqueQueue<Int>(5)
+        uniqueQueue.add(3)
+        uniqueQueue.add(2)
+        uniqueQueue.add(10)
+        uniqueQueue.add(120)
+        assertEquals(3, uniqueQueue.remove())
+        assertEquals(2, uniqueQueue.remove())
+        uniqueQueue.add(54)
+        assertEquals(10, uniqueQueue.remove())
+        uniqueQueue.add(30)
+        assertEquals(120, uniqueQueue.remove())
+        assertEquals(54, uniqueQueue.remove())
+        assertEquals(30, uniqueQueue.remove())
+        assertEquals(null, uniqueQueue.poll())
+    }
+
+    @Test
     fun shouldCheckThatPollFunctionReturnNullIfQueueIsEmpty() {
         val uniqueQueue = UniqueQueue<Int>(5)
         assertEquals(null, uniqueQueue.poll())
