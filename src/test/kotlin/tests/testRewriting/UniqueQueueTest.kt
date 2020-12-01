@@ -103,4 +103,26 @@ internal class UniqueQueueTest {
         assertEquals(3, uniqueQueue.remove())
         assertEquals(null, uniqueQueue.poll())
     }
+
+    @Test
+    fun shouldCheckThatPollFunctionReturnNullIfQueueIsEmpty() {
+        val uniqueQueue = UniqueQueue<Int>(5)
+        assertEquals(null, uniqueQueue.poll())
+    }
+
+    @Test
+    fun shouldCheckThatPollFunctionRemovesElementFromTheQueue() {
+        val uniqueQueue = UniqueQueue<Int>(5)
+        uniqueQueue.add(3)
+        assertEquals(3, uniqueQueue.poll())
+        assertTrue(uniqueQueue.isEmpty())
+    }
+
+    @Test
+    fun shouldCheckIfElementFunctionDoNotRemoveElementFromTheQueue() {
+        val uniqueQueue = UniqueQueue<Int>(5)
+        uniqueQueue.add(3)
+        assertEquals(3, uniqueQueue.element())
+        assertFalse(uniqueQueue.isEmpty())
+    }
 }
